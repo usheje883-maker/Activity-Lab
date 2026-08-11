@@ -34,7 +34,7 @@ body {
     gap: 10px;
 }
 
-#MainB {
+.MainB {
     width: 125px;
     height: 30px;
     font-size: 15px;
@@ -48,12 +48,12 @@ body {
     transition: 0.2s;
 }
 
-#MainB:hover {
+.MainB:hover {
     background-color: #4a4a4a;
     transform: scale(1.1);
 }
 
-#gametemplate {
+.gametemplate {
     background: none;
     width: 200px;
     height: 200px;
@@ -62,7 +62,7 @@ body {
     cursor: pointer;
 }
 
-#gametemplate .gameimage {
+.gametemplate .gameimage {
     width: 200px;
     height: 200px;
     object-fit: cover;
@@ -70,7 +70,7 @@ body {
     transition: 0.2s;
 }
 
-#gametemplate h1 {
+.gametemplate h1 {
     width: 200px;
     height: 30px;
     position: absolute;
@@ -87,15 +87,15 @@ body {
     transition: 0.2s;
 }
 
-#gametemplate:hover h1 {
+.gametemplate:hover h1 {
     opacity: 1;
 }
 
-#gametemplate:hover .gameimage {
+.gametemplate:hover .gameimage {
     filter: brightness(50%);
 }
 
-#gameholder {
+.gameholder {
     background: none;
     width: 100vw;
     min-height: 75vh;
