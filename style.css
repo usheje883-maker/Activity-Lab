@@ -55,16 +55,16 @@ body {
 
 #gametemplate {
     background: none;
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 200px;
     position: relative;
     border-radius: 15px;
     cursor: pointer;
 }
 
 #gametemplate .gameimage {
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 200px;
     object-fit: cover;
     border-radius: 10px;
     transition: 0.2s;
