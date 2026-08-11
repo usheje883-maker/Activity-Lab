@@ -110,7 +110,10 @@ body {
   gap: 30px;
 }
 
-#gameplayer{
+#gameplayer {
+    display: block;
     width: 85vw;
     height: 85vh;
+    border: none;
+    margin: 0 auto;
 }
