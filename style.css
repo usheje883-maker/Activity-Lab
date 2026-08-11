@@ -114,6 +114,6 @@ body {
     display: block;
     width: 85vw;
     height: 85vh;
+    margin: 20px auto;
     border: none;
-    margin: 0 auto;
 }
