@@ -54,9 +54,7 @@ body {
 }
 
 .gametemplate {
-    visibility: hidden;
-    width: 0px;
-    height: 0px;
+  display: none;
 }
 
 .gameobject {
@@ -101,15 +99,13 @@ body {
     filter: brightness(50%);
 }
 
-.gameholder {
-    background: none;
-    width: 100vw;
-    min-height: 75vh;
-    padding: 25px;
 
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 200px);
-    gap: 30px;
-    justify-content: center;
-    box-sizing: border-box;
+#gameholder {
+  background: none;
+  width: 100vw;
+  min-height: 75vh;
+  padding: 25px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 200px);
+  gap: 30px;
 }
