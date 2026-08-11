@@ -102,7 +102,7 @@ body {
     padding: 25px;
 
     display: grid;
-    grid-template-columns: repeat(auto-fill, 150px);
+    grid-template-columns: repeat(auto-fill, 200px);
     gap: 30px;
     justify-content: center;
     box-sizing: border-box;
