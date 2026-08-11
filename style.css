@@ -20,6 +20,8 @@ body {
 
 .topper h1 {
     transform: translate(30px, 0);
+    width: 0px;
+    height: 0px;
 }
 
 .subtopper {
