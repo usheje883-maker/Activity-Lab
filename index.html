@@ -28,8 +28,10 @@
       function CreateTemplate() {
         const original = document.querySelector(".gametemplate")
         const clone = original.cloneNode(true);
+        const holder = document.getElementById("gameholder");
 
         clone.classList.replace("gametemplate", "gameobject");
+        holder.appendChild(clone);
       }
     </script>
   </body>
