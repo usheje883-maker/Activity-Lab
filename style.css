@@ -96,7 +96,7 @@ body {
 }
 
 #gameholder {
-    background: white;
+    background: none;
     width: 100vw;
     min-height: 75vh;
     padding: 25px;
