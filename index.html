@@ -23,5 +23,14 @@
             <h1 class="gamename">Game Name</h1>
         </div>
     </div>
+
+    <script>
+      function CreateTemplate() {
+        const original = document.querySelector(".gametemplate")
+        const clone = original.cloneNode(true);
+
+        clone.classList.replace("gametemplate", "gameobject");
+      }
+    </script>
   </body>
 </html>
