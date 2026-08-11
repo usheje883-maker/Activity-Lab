@@ -53,7 +53,7 @@ body {
     transform: scale(1.1);
 }
 
-.gametemplate {
+.gameobject {
     background: none;
     width: 200px;
     height: 200px;
@@ -62,7 +62,7 @@ body {
     cursor: pointer;
 }
 
-.gametemplate .gameimage {
+.gameobject .gameimage {
     width: 200px;
     height: 200px;
     object-fit: cover;
@@ -70,7 +70,7 @@ body {
     transition: 0.2s;
 }
 
-.gametemplate h1 {
+.gameobject h1 {
     width: 200px;
     height: 30px;
     position: absolute;
@@ -87,11 +87,11 @@ body {
     transition: 0.2s;
 }
 
-.gametemplate:hover h1 {
+.gameobject:hover h1 {
     opacity: 1;
 }
 
-.gametemplate:hover .gameimage {
+.gameobject:hover .gameimage {
     filter: brightness(50%);
 }
 
