@@ -26,17 +26,41 @@
       
     </div>
 
-    <script>
-      function CreateTemplate() {
-        const original = document.querySelector(".gametemplate")
-        const clone = original.cloneNode(true);
-        const holder = document.getElementById("gameholder");
+    <div class="subtopper">
+  <button class="MainB" onclick="CreateTemplate('Yippy!', 'mainframe.html', 'https://media1.tenor.com/m/QeyFuBQrWyYAAAAd/irobot-i-robot.gif')">All Games</button>
+  <button class="MainB">Flash</button>
+  <button class="MainB">Library</button>
+  <button class="MainB">Emulated</button>
+  <button class="MainB">Misc</button>
+</div>
 
-        clone.classList.replace("gametemplate", "gameobject");
-        holder.appendChild(clone);
-      }
+<div class="gametemplate">
+  <img class="gameimage" src="https://media1.tenor.com/m/QeyFuBQrWyYAAAAd/irobot-i-robot.gif">
+  <h1 class="gamename">Game Name</h1>
+</div>
 
-      CreateTemplate();
-    </script>
+<div id="gameholder"></div>
+
+<script>
+  function CreateTemplate(name, link) {
+    const original = document.querySelector(".gametemplate");
+    const clone = original.cloneNode(true);
+    const holder = document.getElementById("gameholder");
+
+    const gameName = clone.querySelector(".gamename");
+    const gameImage = clone.querySelector(".gameimage");
+
+    clone.classList.replace("gametemplate", "gameobject");
+
+    gameName.textContent = name;
+    gameImage.onclick = function() {
+      window.location.href = link;
+    };
+
+    holder.appendChild(clone);
+  }
+
+  CreateTemplate("Game Name", "mainframe.html");
+</script>
   </body>
 </html>
