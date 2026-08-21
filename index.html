@@ -78,11 +78,11 @@ async function LoadGames() {
                 const name = lines[0] || gameFolder;
                 const image = lines[1] || "";
                 const link = lines[2] || "";
-              
+
                 console.log(`Loaded game: "${name}" (folder: ${gameFolder})`);
 
                 const template = document.createElement("div");
-                template.className = "gametemplate";
+                template.className = "game";
 
                 const gameImage = document.createElement("img");
                 gameImage.className = "gameimage";
