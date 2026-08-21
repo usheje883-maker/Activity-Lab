@@ -19,9 +19,10 @@
     <script>
       const urlParams = new URLSearchParams(window.location.search);
       const fullQuery = window.location.search.substring(1); 
+      const iframe = document.querySelector('.gameplayer');
 
-      console.log(fullQuery);
 
+      iframe.src = fullQuery
     </script>
   </body>
 </html>
