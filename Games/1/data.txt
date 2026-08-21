@@ -1,1 +1,2 @@
 GAGA SIMULATOR
+/Games/1/image.png
