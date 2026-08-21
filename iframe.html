@@ -14,15 +14,73 @@
     	<button class="MainB">Fullscreen</button>
     </div>
 
-    <iframe class="gameplayer" src="https://google.com"></iframe>
+<script>
+async function CreateTemplate(name, link, image, sc) {
+  const original = document.querySelector(".gametemplate");
+  const clone = original.cloneNode(true);
+  const holder = document.getElementById("gameholder");
 
-    <script>
-      const urlParams = new URLSearchParams(window.location.search);
-      const fullQuery = window.location.search.substring(1); 
-      const iframe = document.querySelector('.gameplayer');
+  const gameName = clone.querySelector(".gamename");
+  const gameImage = clone.querySelector(".gameimage");
 
+  clone.classList.replace("gametemplate", "gameobject");
 
-      iframe.src = fullQuery
-    </script>
+  gameName.textContent = name;
+  gameImage.src = image;
+
+  if (sc) {
+    clone.classList.add(sc);
+  }
+
+  gameImage.onclick = function() {
+    window.location.href = link;
+  };
+
+  holder.appendChild(clone);
+}
+
+async function LoadGames() {
+  const apiURL = "https://api.github.com/repos/usheje883-maker/Activity-Lab/contents/Games";
+
+  try {
+    const response = await fetch(apiURL);
+    const games = await response.json();
+
+    for (const game of games) {
+      if (game.type !== "dir") continue;
+
+      const gamePath = game.path;
+
+      const dataResponse = await fetch(
+        `https://api.github.com/repos/usheje883-maker/Activity-Lab/contents/${gamePath}/data.txt`
+      );
+
+      if (!dataResponse.ok) continue;
+
+      const data = await dataResponse.json();
+
+      const text = atob(data.content);
+      const lines = text.split(/\r?\n/);
+
+      const name = lines[0]?.trim() || game.name;
+      const category = lines[1]?.trim() || "misc";
+      const image = lines[2]?.trim() || "https://media1.tenor.com/m/QeyFuBQrWyYAAAAd/irobot-i-robot.gif";
+
+      const link = `iframe.html?${gamePath}/Files/index.html`;
+
+      CreateTemplate(
+        name,
+        link,
+        image,
+        category
+      );
+    }
+  } catch (error) {
+    console.error("Failed to load games:", error);
+  }
+}
+
+LoadGames();
+</script>
   </body>
 </html>
