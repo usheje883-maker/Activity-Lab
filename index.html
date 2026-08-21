@@ -37,13 +37,13 @@
 
     gameName.textContent = name;
     gameImage.src = image;
+    clone.classList.add(sc);
 
     gameImage.onclick = function() {
       window.location.href = link;
     };
 
     holder.appendChild(clone);
-    holder.classList.add(sc);
   }
 
   CreateTemplate(
