@@ -13,6 +13,12 @@
       <button class="MainB" onclick="location.href='/index.html'">Back</button>
     	<button class="MainB">Fullscreen</button>
     </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const fullQuery = window.location.search.substring(1); 
+        const iframe = document.querySelector('.gameplayer');
 
+        iframe.src = fullQuery; 
+    </script>
   </body>
 </html>
