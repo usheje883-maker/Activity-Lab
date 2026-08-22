@@ -23,7 +23,7 @@
     </div>
     
     <div id="gameholder"></div>
-     <script>
+    <script>
 async function LoadGames() {
     const repo = "usheje883-maker/Activity-Lab";
     const gamesPath = "Games";
@@ -35,7 +35,9 @@ async function LoadGames() {
     }
 
     try {
-        const response = await fetch(`https://api.github.com/repos/${repo}/contents/${gamesPath}`);
+        const response = await fetch(
+            `https://api.github.com/repos/${repo}/contents/${gamesPath}`
+        );
 
         if (!response.ok) {
             throw new Error(`GitHub API error: ${response.status}`);
@@ -57,18 +59,24 @@ async function LoadGames() {
                 );
 
                 if (!dataResponse.ok) {
-                    console.warn(`Skipping ${gameFolder}: data.txt not found (Status: ${dataResponse.status})`);
+                    console.warn(
+                        `Skipping ${gameFolder}: data.txt not found (Status: ${dataResponse.status})`
+                    );
                     continue;
                 }
 
                 const dataFile = await dataResponse.json();
 
                 if (!dataFile.content) {
-                    console.warn(`Skipping ${gameFolder}: data.txt is empty`);
+                    console.warn(
+                        `Skipping ${gameFolder}: data.txt is empty`
+                    );
                     continue;
                 }
 
-                const data = atob(dataFile.content.replace(/\n/g, ""));
+                const data = atob(
+                    dataFile.content.replace(/\n/g, "")
+                );
 
                 const lines = data
                     .split(/\r?\n/)
@@ -79,7 +87,8 @@ async function LoadGames() {
                 const image = lines[1] || "";
                 const link = lines[2] || "";
 
-                console.log(`Loaded game: "${name}" (folder: ${gameFolder})`);
+                console.log(`Loaded game: "${name}"`);
+                console.log(`Game path: "${link}"`);
 
                 const template = document.createElement("div");
                 template.className = "gameobject";
@@ -96,17 +105,25 @@ async function LoadGames() {
                 template.appendChild(gameImage);
                 template.appendChild(gameName);
 
-                template.style.cursor = "pointer";
-                template.addEventListener("click", function () {
-                    const gamePath = `${gamesPath}/${gameFolder}`;
-                    window.location.href = `iframe.html?${encodeURIComponent(gamePath)}`;
-                });
+                if (link) {
+                    template.style.cursor = "pointer";
+
+                    template.addEventListener("click", function () {
+                        window.location.href =
+                            `iframe.html?${encodeURIComponent(link)}`;
+                    });
+                }
 
                 gameholder.appendChild(template);
+
             } catch (error) {
-                console.error(`Error loading game "${gameFolder}":`, error);
+                console.error(
+                    `Error loading game "${gameFolder}":`,
+                    error
+                );
             }
         }
+
     } catch (error) {
         console.error("Error loading games:", error);
     }
