@@ -96,12 +96,11 @@ async function LoadGames() {
                 template.appendChild(gameImage);
                 template.appendChild(gameName);
 
-                if (link) {
-                    template.style.cursor = "pointer";
-                    template.addEventListener("click", function () {
-                        window.location.href = link;
-                    });
-                }
+                template.style.cursor = "pointer";
+                template.addEventListener("click", function () {
+                    const gamePath = `${gamesPath}/${gameFolder}`;
+                    window.location.href = `iframe.html?${encodeURIComponent(gamePath)}`;
+                });
 
                 gameholder.appendChild(template);
             } catch (error) {
