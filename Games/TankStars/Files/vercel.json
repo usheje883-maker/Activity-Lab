@@ -1,0 +1,32 @@
+{
+  "outputDirectory": ".",
+  "headers": [
+    {
+      "source": "/Build/tankstars.data.br",
+      "headers": [
+        { "key": "Content-Type", "value": "application/octet-stream" },
+        { "key": "Cache-Control", "value": "no-transform" }
+      ]
+    },
+    {
+      "source": "/Build/tankstars.wasm.br",
+      "headers": [
+        { "key": "Content-Type", "value": "application/wasm" },
+        { "key": "Cache-Control", "value": "no-transform" }
+      ]
+    },
+    {
+      "source": "/Build/tankstars.framework.js.br",
+      "headers": [
+        { "key": "Content-Type", "value": "application/javascript" },
+        { "key": "Cache-Control", "value": "no-transform" }
+      ]
+    },
+    {
+      "source": "/StreamingAssets/(.*)",
+      "headers": [
+        { "key": "Content-Type", "value": "application/octet-stream" }
+      ]
+    }
+  ]
+}
