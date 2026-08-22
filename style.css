@@ -129,6 +129,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 15px;
+    background-color: grey;
 }
 
 .imgbutton {
