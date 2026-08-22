@@ -1,3 +1,3 @@
-GAGA SIMULATOR
-/Games/1/image.png
-/Games/1/Files/index.html
+Drift Hunters
+/Games/2/image.png
+/Games/2/Files/index.html
