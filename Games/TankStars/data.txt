@@ -1,3 +1,0 @@
-Tank Stars
-/Games/TankStars/image.png
-/Games/TankStars/Files/index.html

@@ -1,0 +1,3 @@
+GAGA SIMULATOR
+/Games/1/image.png
+/Games/1/Files/index.html
