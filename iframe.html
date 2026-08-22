@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
     <title>Activity Lab | Activity List</title>
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -11,17 +12,41 @@
 
     <div class="subtopper">
       <button class="MainB" onclick="location.href='/index.html'">Back</button>
-    	<button class="MainB">Fullscreen</button>
+      <button class="MainB" onclick="openInBlank()">Fullscreen</button>
     </div>
-    
-    <iframe class="gameplayer"></iframe>
-    
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const fullQuery = window.location.search.substring(1); 
-        const iframe = document.querySelector('.gameplayer');
 
-        iframe.src = decodeURIComponent(fullQuery); 
+    <iframe class="gameplayer"></iframe>
+
+    <script>
+      const fullQuery = window.location.search.substring(1);
+      const pageIframe = document.querySelector('.gameplayer');
+
+      if (fullQuery) {
+        pageIframe.src = decodeURIComponent(fullQuery);
+      }
+
+      function openInBlank() {
+        const newWindow = window.open('about:blank', '_blank');
+
+        if (newWindow) {
+          const popupIframe = newWindow.document.createElement('iframe');
+          popupIframe.src = decodeURIComponent(fullQuery);
+          popupIframe.style.position = 'fixed';
+          popupIframe.style.top = '0';
+          popupIframe.style.left = '0';
+          popupIframe.style.width = '100vw';
+          popupIframe.style.height = '100vh';
+          popupIframe.style.border = 'none';
+          popupIframe.style.margin = '0';
+          popupIframe.style.padding = '0';
+          popupIframe.style.overflow = 'hidden';
+
+          newWindow.document.body.style.margin = '0';
+          newWindow.document.body.appendChild(popupIframe);
+        } else {
+          alert("Please allow popups for this website to open the tab.");
+        }
+      }
     </script>
   </body>
 </html>
