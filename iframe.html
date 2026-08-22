@@ -20,7 +20,7 @@
         const fullQuery = window.location.search.substring(1); 
         const iframe = document.querySelector('.gameplayer');
 
-        iframe.src = fullQuery; 
+        iframe.src = decodeURIComponent(fullQuery); 
     </script>
   </body>
 </html>
