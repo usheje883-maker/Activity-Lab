@@ -1,0 +1,3 @@
+Rooftop Sniper 2
+/Games/7/image.png
+/Games/7/Files/index.html
