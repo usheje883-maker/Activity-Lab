@@ -33,7 +33,7 @@ async function LoadGames() {
 
     try {
         const response = await fetch(
-            `https://api.github.com/repos/${repo}/contents/${gamesPath}`
+            `https://rawcdn.githack.com/repos/${repo}/contents/${gamesPath}`
         );
 
         if (!response.ok) {
