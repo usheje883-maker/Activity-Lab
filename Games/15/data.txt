@@ -1,0 +1,3 @@
+AdVenture Capitalist!
+/Games/15/image.png
+/Games/15/Files/index.html
