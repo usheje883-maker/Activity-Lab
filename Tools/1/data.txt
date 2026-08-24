@@ -1,3 +1,3 @@
-Gun Spin
-/Games/1/image.png
-/Games/1/Files/index.html
+Aya Studio
+/Tools/1/image.png
+/Tools/1/Files/index.html
