@@ -27,7 +27,6 @@
     <script>
 async function LoadGames() {
     const repo = "usheje883-maker/Activity-Lab";
-    const gamesPath = "Games";
     const gameholder = document.getElementById("gameholder");
 
     if (!gameholder) {
@@ -37,49 +36,34 @@ async function LoadGames() {
 
     try {
         const response = await fetch(
-            `https://api.github.com/repos/${repo}/contents/${gamesPath}`
+            `https://data.jsdelivr.com/v1/packages/gh/${repo}@main?structure=flat`
         );
 
         if (!response.ok) {
-            throw new Error(`GitHub API error: ${response.status}`);
+            throw new Error(`jsDelivr API error: ${response.status}`);
         }
 
-        const items = await response.json();
+        const data = await response.json();
+
+        const gameDataFiles = data.files.filter(
+            file => file.name.startsWith('/Games/') && file.name.endsWith('/data.txt')
+        );
+
         gameholder.innerHTML = "";
 
-        for (const item of items) {
-            if (item.type !== "dir") {
-                continue;
-            }
-
-            const gameFolder = item.name;
+        for (const file of gameDataFiles) {
+            const pathParts = file.name.split('/');
+            const gameFolder = pathParts[2];
 
             try {
-                const dataResponse = await fetch(
-                    `https://api.github.com/repos/${repo}/contents/${gamesPath}/${encodeURIComponent(gameFolder)}/data.txt`
+                const txtResponse = await fetch(
+                    `https://cdn.jsdelivr.net/gh/${repo}@main${file.name}`
                 );
 
-                if (!dataResponse.ok) {
-                    console.warn(
-                        `Skipping ${gameFolder}: data.txt not found (Status: ${dataResponse.status})`
-                    );
-                    continue;
-                }
+                if (!txtResponse.ok) continue;
 
-                const dataFile = await dataResponse.json();
-
-                if (!dataFile.content) {
-                    console.warn(
-                        `Skipping ${gameFolder}: data.txt is empty`
-                    );
-                    continue;
-                }
-
-                const data = atob(
-                    dataFile.content.replace(/\n/g, "")
-                );
-
-                const lines = data
+                const textData = await txtResponse.text();
+                const lines = textData
                     .split(/\r?\n/)
                     .map(line => line.trim())
                     .filter(line => line.length > 0);
@@ -87,9 +71,6 @@ async function LoadGames() {
                 const name = lines[0] || gameFolder;
                 const image = lines[1] || "";
                 const link = lines[2] || "";
-
-                console.log(`Loaded game: "${name}"`);
-                console.log(`Game path: "${link}"`);
 
                 const template = document.createElement("div");
                 template.className = "gameobject";
@@ -108,25 +89,20 @@ async function LoadGames() {
 
                 if (link) {
                     template.style.cursor = "pointer";
-
                     template.addEventListener("click", function () {
-                        window.location.href =
-                            `iframe.html?${encodeURIComponent(link)}`;
+                        window.location.href = `iframe.html?${encodeURIComponent(link)}`;
                     });
                 }
 
                 gameholder.appendChild(template);
 
             } catch (error) {
-                console.error(
-                    `Error loading game "${gameFolder}":`,
-                    error
-                );
+                console.error(`Error loading game "${gameFolder}":`, error);
             }
         }
 
     } catch (error) {
-        console.error("Error loading games:", error);
+        console.error("Error loading games via jsDelivr:", error);
     }
 }
 
