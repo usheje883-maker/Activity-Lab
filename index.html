@@ -20,108 +20,109 @@
     </div>
     
     <div id="gameholder"></div>
+    
     <script>
-async function LoadGames() {
-    const repo = "usheje883-maker/Activity-Lab";
-    const branch = "main";
-    const gameholder = document.getElementById("gameholder");
+    async function LoadGames() {
+        const repo = "usheje883-maker/Activity-Lab";
+        const branch = "main";
+        const gameholder = document.getElementById("gameholder");
 
-    if (!gameholder) {
-        console.error("Could not find #gameholder");
-        return;
-    }
-
-    try {
-        const response = await fetch(
-            `https://api.github.com/repos/${repo}/git/trees/${branch}?recursive=1`
-        );
-
-        if (!response.ok) {
-            throw new Error(`GitHub API error: ${response.status}`);
+        if (!gameholder) {
+            console.error("Could not find #gameholder");
+            return;
         }
 
-        const data = await response.json();
+        try {
+            const response = await fetch(
+                `https://api.github.com/repos/${repo}/git/trees/${branch}?recursive=1`
+            );
 
-        const gameDataFiles = data.tree.filter(file =>
-            file.type === "blob" &&
-            file.path.startsWith("Games/") &&
-            file.path.endsWith("/data.txt")
-        );
-
-        gameholder.innerHTML = "";
-
-        for (const file of gameDataFiles) {
-            const pathParts = file.path.split("/");
-            const gameFolder = pathParts[1];
-
-            try {
-                const txtResponse = await fetch(
-                    `https://raw.githubusercontent.com/${repo}/${branch}/${file.path}`
-                );
-
-                if (!txtResponse.ok) {
-                    console.error(`Failed to load ${file.path}`);
-                    continue;
-                }
-
-                const textData = await txtResponse.text();
-
-                const lines = textData
-                    .split(/\r?\n/)
-                    .map(line => line.trim());
-
-                const gameTitleText = lines[0] || gameFolder;
-                const gameImagePath = lines[1] || "";
-                const gameLinkPath = lines[2] || "";
-
-                let gameImageUrl = gameImagePath;
-
-                if (gameImagePath.startsWith("/")) {
-                    gameImageUrl =
-                        `https://cdn.jsdelivr.net/gh/${repo}@${branch}${gameImagePath}`;
-                }
-
-                const template = document.createElement("div");
-                template.className = "gameobject";
-
-                const imgElement = document.createElement("img");
-                imgElement.className = "gameimage";
-                imgElement.src = gameImageUrl;
-                imgElement.alt = gameTitleText;
-
-                const titleElement = document.createElement("h1");
-                titleElement.className = "gamename";
-                titleElement.textContent = gameTitleText;
-
-                template.appendChild(imgElement);
-                template.appendChild(titleElement);
-
-                if (gameLinkPath) {
-                    template.style.cursor = "pointer";
-
-                    template.addEventListener("click", () => {
-                        window.location.href =
-                            `iframe.html?${encodeURIComponent(gameLinkPath)}`;
-                    });
-                }
-
-                gameholder.appendChild(template);
-
-            } catch (error) {
-                console.error(
-                    `Error loading game "${gameFolder}":`,
-                    error
-                );
+            if (!response.ok) {
+                throw new Error(`GitHub API error: ${response.status}`);
             }
+
+            const data = await response.json();
+
+            const gameDataFiles = data.tree.filter(file =>
+                file.type === "blob" &&
+                file.path.startsWith("Games/") &&
+                file.path.endsWith("/data.txt")
+            );
+
+            gameholder.innerHTML = "";
+
+            for (const file of gameDataFiles) {
+                const pathParts = file.path.split("/");
+                const gameFolder = pathParts[1];
+
+                try {
+                    const txtResponse = await fetch(
+                        `https://cdn.jsdelivr.net/gh/${repo}@${branch}/${file.path}`
+                    );
+
+                    if (!txtResponse.ok) {
+                        console.error(`Failed to load ${file.path}`);
+                        continue;
+                    }
+
+                    const textData = await txtResponse.text();
+
+                    const lines = textData
+                        .split(/\r?\n/)
+                        .map(line => line.trim());
+
+                    const gameTitleText = lines[0] || gameFolder;
+                    const gameImagePath = lines[1] || "";
+                    const gameLinkPath = lines[2] || "";
+
+                    let gameImageUrl = gameImagePath;
+
+                    if (gameImagePath.startsWith("/")) {
+                        gameImageUrl =
+                            `https://cdn.jsdelivr.net/gh/${repo}@${branch}${gameImagePath}`;
+                    }
+
+                    const template = document.createElement("div");
+                    template.className = "gameobject";
+
+                    const imgElement = document.createElement("img");
+                    imgElement.className = "gameimage";
+                    imgElement.src = gameImageUrl;
+                    imgElement.alt = gameTitleText;
+
+                    const titleElement = document.createElement("h1");
+                    titleElement.className = "gamename";
+                    titleElement.textContent = gameTitleText;
+
+                    template.appendChild(imgElement);
+                    template.appendChild(titleElement);
+
+                    if (gameLinkPath) {
+                        template.style.cursor = "pointer";
+
+                        template.addEventListener("click", () => {
+                            window.location.href =
+                                `iframe.html?${encodeURIComponent(gameLinkPath)}`;
+                        });
+                    }
+
+                    gameholder.appendChild(template);
+
+                } catch (error) {
+                    console.error(
+                        `Error loading game "${gameFolder}":`,
+                        error
+                    );
+                }
+            }
+
+        } catch (error) {
+            console.error("Error loading games:", error);
         }
-
-    } catch (error) {
-        console.error("Error loading games:", error);
     }
-}
 
-document.addEventListener("DOMContentLoaded", LoadGames);
-</script>
+    document.addEventListener("DOMContentLoaded", LoadGames);
+    </script>
     
   </body>
 </html>
