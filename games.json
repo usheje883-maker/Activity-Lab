@@ -1,0 +1,108 @@
+{
+  "games": [
+    {
+      "id": 1,
+      "title": "Gun Spin",
+      "genre": "Gun"
+    },
+
+    {
+      "id": 2,
+      "title": "Drift Hunters",
+      "genre": "Car"
+    },
+    
+    {
+      "id": 3,
+      "title": "Zombie Rush",
+      "genre": "Survial"
+    },
+
+    {
+      "id": 4,
+      "title": "Escape Road",
+      "genre": "Car"
+    },
+    
+    {
+      "id": 5,
+      "title": "Eggy Car",
+      "genre": "Action"
+    },
+
+    {
+      "id": 6,
+      "title": "Eaglercraft 1.16",
+      "genre": "Action"
+    },
+
+    {
+      "id": 7,
+      "title": "Game Title Here",
+      "genre": "Action"
+    },
+
+    {
+      "id": 8,
+      "title": "Game Title Here",
+      "genre": "Action"
+    },
+    {
+      "id": 9,
+      "title": "Game Title Here",
+      "genre": "Action"
+    },
+
+    {
+      "id": 10,
+      "title": "Game Title Here",
+      "genre": "Action"
+    },
+    {
+      "id": 11,
+      "title": "Game Title Here",
+      "genre": "Action"
+    },
+
+    {
+      "id": 12,
+      "title": "Game Title Here",
+      "genre": "Action"
+    },
+    {
+      "id": 13,
+      "title": "Game Title Here",
+      "genre": "Action"
+    },
+
+    {
+      "id": 14,
+      "title": "Game Title Here",
+      "genre": "Action"
+    },
+    
+
+    {
+      "id": 15,
+      "title": "Game Title Here",
+      "genre": "Action"
+    },
+
+    {
+      "id": 16,
+      "title": "Game Title Here",
+      "genre": "Action"
+    },
+    {
+      "id": 17,
+      "title": "Game Title Here",
+      "genre": "Action"
+    },
+
+    {
+      "id": 18,
+      "title": "Game Title Here",
+      "genre": "Action"
+    },
+  ]
+}
