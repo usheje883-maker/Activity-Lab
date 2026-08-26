@@ -34,32 +34,17 @@
 
         try {
             const response = await fetch(
-                `https://data.jsdelivr.com/v1/package/gh/${repo}@${branch}`
+                `https://api.github.com/repos/${repo}/git/trees/${branch}?recursive=1`
             );
 
             if (!response.ok) {
-                throw new Error(`jsDelivr API error: ${response.status}`);
+                throw new Error(`GitHub API error: ${response.status}`);
             }
 
             const data = await response.json();
 
-            let allFiles = [];
-            function extractFiles(filesArray, currentPath = "") {
-                for (const item of filesArray) {
-                    const itemPath = currentPath ? `${currentPath}/${item.name}` : item.name;
-                    if (item.type === "directory" && item.files) {
-                        extractFiles(item.files, itemPath);
-                    } else if (item.type === "file") {
-                        allFiles.push({ path: itemPath });
-                    }
-                }
-            }
-            
-            if (data.files) {
-                extractFiles(data.files);
-            }
-
-            const gameDataFiles = allFiles.filter(file =>
+            const gameDataFiles = data.tree.filter(file =>
+                file.type === "blob" &&
                 file.path.startsWith("Games/") &&
                 file.path.endsWith("/data.txt")
             );
@@ -91,7 +76,7 @@
                     const gameLinkPath = lines[2] || "";
 
                     let gameImageUrl = gameImagePath;
-                  
+
                     if (gameImagePath.startsWith("/")) {
                         gameImageUrl =
                             `https://cdn.jsdelivr.net/gh/${repo}@${branch}${gameImagePath}`;
