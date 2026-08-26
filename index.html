@@ -31,17 +31,11 @@ async function LoadGames() {
     }
 
     try {
-        let branch = "main";
-        let response = await fetch(
-            `https://data.jsdelivr.com/v1/package/gh/${repo}@main/flat`
-        );
+        const branch = "main";
 
-        if (!response.ok) {
-            branch = "master";
-            response = await fetch(
-                `https://data.jsdelivr.com/v1/package/gh/${repo}@master/flat`
-            );
-        }
+        const response = await fetch(
+            `https://data.jsdelivr.com/v1/package/gh/${repo}@${branch}/flat`
+        );
 
         if (!response.ok) {
             throw new Error(`jsDelivr API error: ${response.status}`);
@@ -49,32 +43,42 @@ async function LoadGames() {
 
         const data = await response.json();
 
-        const gameDataFiles = data.files.filter(
-            file => file.name.startsWith('/Games/') && file.name.endsWith('/data.txt')
+        const gameDataFiles = data.files.filter(file =>
+            file.name.replace(/^\/+/, "").startsWith("Games/") &&
+            file.name.endsWith("/data.txt")
         );
 
         gameholder.innerHTML = "";
 
         for (const file of gameDataFiles) {
-            const pathParts = file.name.split('/');
-            const gameFolder = pathParts[2];
+            const cleanPath = file.name.replace(/^\/+/, "");
+            const pathParts = cleanPath.split("/");
+            const gameFolder = pathParts[1];
 
             try {
                 const txtResponse = await fetch(
-                    `https://cdn.jsdelivr.net/gh/${repo}@${branch}${file.name}`
+                    `https://cdn.jsdelivr.net/gh/${repo}@${branch}/${cleanPath}`
                 );
 
-                if (!txtResponse.ok) continue;
+                if (!txtResponse.ok) {
+                    console.error(`Failed to load ${cleanPath}`);
+                    continue;
+                }
 
                 const textData = await txtResponse.text();
+
                 const lines = textData
                     .split(/\r?\n/)
                     .map(line => line.trim())
                     .filter(line => line.length > 0);
 
                 const gameTitleText = lines[0] || gameFolder;
-                const gameImageUrl = lines[1] || "";
-                const gameLinkUrl = lines[2] || "";
+                const gameImagePath = lines[1] || "";
+                const gameLinkPath = lines[2] || "";
+
+                const gameImageUrl = gameImagePath.startsWith("/")
+                    ? `https://cdn.jsdelivr.net/gh/${repo}@${branch}${gameImagePath}`
+                    : gameImagePath;
 
                 const template = document.createElement("div");
                 template.className = "gameobject";
@@ -91,10 +95,12 @@ async function LoadGames() {
                 template.appendChild(imgElement);
                 template.appendChild(titleElement);
 
-                if (gameLinkUrl) {
+                if (gameLinkPath) {
                     template.style.cursor = "pointer";
+
                     template.addEventListener("click", function () {
-                        window.location.href = `iframe.html?${encodeURIComponent(gameLinkUrl)}`;
+                        window.location.href =
+                            `iframe.html?${encodeURIComponent(gameLinkPath)}`;
                     });
                 }
 
@@ -106,7 +112,7 @@ async function LoadGames() {
         }
 
     } catch (error) {
-        console.error("Error loading games via jsDelivr:", error);
+        console.error("Error loading games:", error);
     }
 }
 
