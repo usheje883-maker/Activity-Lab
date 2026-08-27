@@ -1,102 +1,102 @@
 [
   {
     "name": "Game 1",
-    "image": "games/1/image.png",
-    "link": "games/1/files/index.html"
+    "image": "Games/1/image.png",
+    "link": "Games/1/Files/index.html"
   },
   {
     "name": "Game 2",
-    "image": "games/2/image.png",
-    "link": "games/2/files/index.html"
+    "image": "Games/2/image.png",
+    "link": "Games/2/Files/index.html"
   },
   {
     "name": "Game 3",
-    "image": "games/3/image.png",
-    "link": "games/3/files/index.html"
+    "image": "Games/3/image.png",
+    "link": "Games/3/Files/index.html"
   },
   {
     "name": "Game 4",
-    "image": "games/4/image.png",
-    "link": "games/4/files/index.html"
+    "image": "Games/4/image.png",
+    "link": "Games/4/Files/index.html"
   },
   {
     "name": "Game 5",
-    "image": "games/5/image.png",
-    "link": "games/5/files/index.html"
+    "image": "Games/5/image.png",
+    "link": "Games/5/Files/index.html"
   },
   {
     "name": "Game 6",
-    "image": "games/6/image.png",
-    "link": "games/6/files/index.html"
+    "image": "Games/6/image.png",
+    "link": "Games/6/Files/index.html"
   },
   {
     "name": "Game 7",
-    "image": "games/7/image.png",
-    "link": "games/7/files/index.html"
+    "image": "Games/7/image.png",
+    "link": "Games/7/Files/index.html"
   },
   {
     "name": "Game 8",
-    "image": "games/8/image.png",
-    "link": "games/8/files/index.html"
+    "image": "Games/8/image.png",
+    "link": "Games/8/Files/index.html"
   },
   {
     "name": "Game 9",
-    "image": "games/9/image.png",
-    "link": "games/9/files/index.html"
+    "image": "Games/9/image.png",
+    "link": "Games/9/Files/index.html"
   },
   {
     "name": "Game 10",
-    "image": "games/10/image.png",
-    "link": "games/10/files/index.html"
+    "image": "Games/10/image.png",
+    "link": "Games/10/Files/index.html"
   },
   {
     "name": "Game 11",
-    "image": "games/11/image.png",
-    "link": "games/11/files/index.html"
+    "image": "Games/11/image.png",
+    "link": "Games/11/Files/index.html"
   },
   {
     "name": "Game 12",
-    "image": "games/12/image.png",
-    "link": "games/12/files/index.html"
+    "image": "Games/12/image.png",
+    "link": "Games/12/Files/index.html"
   },
   {
     "name": "Game 13",
-    "image": "games/13/image.png",
-    "link": "games/13/files/index.html"
+    "image": "Games/13/image.png",
+    "link": "Games/13/Files/index.html"
   },
   {
     "name": "Game 14",
-    "image": "games/14/image.png",
-    "link": "games/14/files/index.html"
+    "image": "Games/14/image.png",
+    "link": "Games/14/Files/index.html"
   },
   {
     "name": "Game 15",
-    "image": "games/15/image.png",
-    "link": "games/15/files/index.html"
+    "image": "Games/15/image.png",
+    "link": "Games/15/Files/index.html"
   },
   {
     "name": "Game 16",
-    "image": "games/16/image.png",
-    "link": "games/16/files/index.html"
+    "image": "Games/16/image.png",
+    "link": "Games/16/Files/index.html"
   },
   {
     "name": "Game 17",
-    "image": "games/17/image.png",
-    "link": "games/17/files/index.html"
+    "image": "Games/17/image.png",
+    "link": "Games/17/Files/index.html"
   },
   {
     "name": "Game 18",
-    "image": "games/18/image.png",
-    "link": "games/18/files/index.html"
+    "image": "Games/18/image.png",
+    "link": "Games/18/Files/index.html"
   },
   {
     "name": "Game 19",
-    "image": "games/19/image.png",
-    "link": "games/19/files/index.html"
+    "image": "Games/19/image.png",
+    "link": "Games/19/Files/index.html"
   },
   {
     "name": "Game 20",
-    "image": "games/20/image.png",
-    "link": "games/20/files/index.html"
+    "image": "Games/20/image.png",
+    "link": "Games/20/Files/index.html"
   }
 ]
