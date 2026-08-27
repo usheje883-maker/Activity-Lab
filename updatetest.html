@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Activity Lab | Activity List</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="topper">
+      <h1>Activity Lab</h1>
+    </div>
+
+    <div class="subtopper">
+      <button class="MainB" onclick="location.href='/index.html'">All Games</button>
+      <button class="MainB" onclick="location.href='/tools.html'">Tools</button>
+    </div>
+
+    <div class="gametemplate">
+      <img class="gameimage" src="https://media1.tenor.com/m/QeyFuBQrWyYAAAAd/irobot-i-robot.gif">
+      <h1 class="gamename">Game Name</h1>
+    </div>
+    
+    <div id="gameholder"></div>
+    
+    <script>
+async function LoadGames() {
+    const jsonUrl = "https://raw.githubusercontent.com/usheje883-maker/Activity-Lab/main/games.json";
+    const gameholder = document.getElementById("gameholder");
+
+    if (!gameholder) {
+        console.error("Could not find #gameholder");
+        return;
+    }
+
+    try {
+        const response = await fetch(jsonUrl);
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch games.json: ${response.status}`);
+        }
+
+        const games = await response.json();
+        gameholder.innerHTML = "";
+
+        for (const game of games) {
+            const name = game.name || "Unknown Game";
+            const image = game.image || "";
+            const link = game.link || "";
+
+            console.log(`Loaded game: "${name}"`);
+            console.log(`Game path: "${link}"`);
+
+            const template = document.createElement("div");
+            template.className = "gameobject";
+
+            const gameImage = document.createElement("img");
+            gameImage.className = "gameimage";
+            gameImage.src = image;
+            gameImage.alt = name;
+
+            const gameName = document.createElement("h1");
+            gameName.className = "gamename";
+            gameName.textContent = name;
+
+            template.appendChild(gameImage);
+            template.appendChild(gameName);
+
+            if (link) {
+                template.style.cursor = "pointer";
+
+                template.addEventListener("click", function () {
+                    window.location.href =
+                        `iframe.html?${encodeURIComponent(link)}`;
+                });
+            }
+
+            gameholder.appendChild(template);
+        }
+
+    } catch (error) {
+        console.error("Error loading games:", error);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", LoadGames);
+</script>
+    
+  </body>
+</html>
