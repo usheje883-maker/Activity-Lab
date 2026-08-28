@@ -1,7 +1,7 @@
 [
     {
     "name": "Game Suggestion",
-    "image": "Storage/gs,png",
+    "image": "Storage/gs.png",
     "link": "https://docs.google.com/forms/d/e/1FAIpQLSd8HM7-E0vftKd_N-IbGhE73oC8H6h_2msHxqAIw4Oq6gtGZQ/viewform?usp=header"
   },
   {
@@ -90,7 +90,7 @@
     "link": "Games/17/Files/index.html"
   },
   {
-    "name": "Game 18",
+    "name": "Bitlife",
     "image": "Games/18/image.png",
     "link": "Games/18/Files/index.html"
   },
