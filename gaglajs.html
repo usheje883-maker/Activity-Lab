@@ -21,113 +21,113 @@
     
     <div id="gameholder"></div>
     <script>
-async function LoadGames() {
-    const repo = "usheje883-maker/Activity-Lab";
-    const gamesPath = "Special";
-    const gameholder = document.getElementById("gameholder");
+		async function LoadGames() {
+		const repo = "usheje883-maker/Activity-Lab";
+		const gamesPath = "Special";
+		const gameholder = document.getElementById("gameholder");
 
-    if (!gameholder) {
-        console.error("Could not find #gameholder");
-        return;
-    }
+		if (!gameholder) {
+		console.error("Could not find #gameholder");
+		return;
+		}
 
-    try {
-        const response = await fetch(
-            `https://api.github.com/repos/${repo}/contents/${gamesPath}`
-        );
+		try {
+		const response = await fetch(
+		`https://api.github.com/repos/${repo}/contents/${gamesPath}`
+		);
 
-        if (!response.ok) {
-            throw new Error(`GitHub API error: ${response.status}`);
-        }
+		if (!response.ok) {
+		throw new Error(`GitHub API error: ${response.status}`);
+		}
 
-        const items = await response.json();
-        gameholder.innerHTML = "";
+		const items = await response.json();
+		gameholder.innerHTML = "";
 
-        for (const item of items) {
-            if (item.type !== "dir") {
-                continue;
-            }
+		for (const item of items) {
+		if (item.type !== "dir") {
+		continue;
+		}
 
-            const gameFolder = item.name;
+		const gameFolder = item.name;
 
-            try {
-                const dataResponse = await fetch(
-                    `https://api.github.com/repos/${repo}/contents/${gamesPath}/${encodeURIComponent(gameFolder)}/data.txt`
-                );
+		try {
+		const dataResponse = await fetch(
+		`https://api.github.com/repos/${repo}/contents/${gamesPath}/${encodeURIComponent(gameFolder)}/data.txt`
+		);
 
-                if (!dataResponse.ok) {
-                    console.warn(
-                        `Skipping ${gameFolder}: data.txt not found (Status: ${dataResponse.status})`
-                    );
-                    continue;
-                }
+		if (!dataResponse.ok) {
+		console.warn(
+		`Skipping ${gameFolder}: data.txt not found (Status: ${dataResponse.status})`
+		);
+		continue;
+		}
 
-                const dataFile = await dataResponse.json();
+		const dataFile = await dataResponse.json();
 
-                if (!dataFile.content) {
-                    console.warn(
-                        `Skipping ${gameFolder}: data.txt is empty`
-                    );
-                    continue;
-                }
+		if (!dataFile.content) {
+		console.warn(
+		`Skipping ${gameFolder}: data.txt is empty`
+		);
+		continue;
+		}
 
-                const data = atob(
-                    dataFile.content.replace(/\n/g, "")
-                );
+		const data = atob(
+		dataFile.content.replace(/\n/g, "")
+		);
 
-                const lines = data
-                    .split(/\r?\n/)
-                    .map(line => line.trim())
-                    .filter(line => line.length > 0);
+		const lines = data
+		.split(/\r?\n/)
+		.map(line => line.trim())
+		.filter(line => line.length > 0);
 
-                const name = lines[0] || gameFolder;
-                const image = lines[1] || "";
-                const link = lines[2] || "";
+		const name = lines[0] || gameFolder;
+		const image = lines[1] || "";
+		const link = lines[2] || "";
 
-                console.log(`Loaded game: "${name}"`);
-                console.log(`Game path: "${link}"`);
+		console.log(`Loaded game: "${name}"`);
+		console.log(`Game path: "${link}"`);
 
-                const template = document.createElement("div");
-                template.className = "gameobject";
+		const template = document.createElement("div");
+		template.className = "gameobject";
 
-                const gameImage = document.createElement("img");
-                gameImage.className = "gameimage";
-                gameImage.src = image;
-                gameImage.alt = name;
+		const gameImage = document.createElement("img");
+		gameImage.className = "gameimage";
+		gameImage.src = image;
+		gameImage.alt = name;
 
-                const gameName = document.createElement("h1");
-                gameName.className = "gamename";
-                gameName.textContent = name;
+		const gameName = document.createElement("h1");
+		gameName.className = "gamename";
+		gameName.textContent = name;
 
-                template.appendChild(gameImage);
-                template.appendChild(gameName);
+		template.appendChild(gameImage);
+		template.appendChild(gameName);
 
-                if (link) {
-                    template.style.cursor = "pointer";
+		if (link) {
+		template.style.cursor = "pointer";
 
-                    template.addEventListener("click", function () {
-                        window.location.href =
-                            `iframe.html?${encodeURIComponent(link)}`;
-                    });
-                }
+		template.addEventListener("click", function () {
+		window.location.href =
+		`specialiframe.html?${encodeURIComponent(link)}`;
+		});
+		}
 
-                gameholder.appendChild(template);
+		gameholder.appendChild(template);
 
-            } catch (error) {
-                console.error(
-                    `Error loading game "${gameFolder}":`,
-                    error
-                );
-            }
-        }
+		} catch (error) {
+		console.error(
+		`Error loading game "${gameFolder}":`,
+		error
+		);
+		}
+		}
 
-    } catch (error) {
-        console.error("Error loading games:", error);
-    }
-}
+		} catch (error) {
+		console.error("Error loading games:", error);
+		}
+		}
 
-document.addEventListener("DOMContentLoaded", LoadGames);
-</script>
+		document.addEventListener("DOMContentLoaded", LoadGames);
+	</script>
     
   </body>
 </html>
