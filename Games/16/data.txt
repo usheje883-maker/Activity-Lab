@@ -1,3 +1,0 @@
-Escape Road 2
-/Games/16/image.png
-/Games/16/Files/index.html
