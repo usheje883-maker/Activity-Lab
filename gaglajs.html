@@ -1,58 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Activity Lab | Activity List</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="topper">
       <h1>Activity Lab</h1>
-      <p1>V0.5</p1>
+      <p>V0.5</p>
     </div>
 
-    <div class="subtopper">
-      <button class="MainB" onclick="location.href='/index.html'">All Games</button>
-      <button class="MainB" onclick="location.href='/tools.html'">Tools</button>
-      <button class="MainB" onclick="location.href='/changelog.html'">Changelog</button>
-    </div>
+    <nav class="subtopper">
+      <a href="/index.html" class="MainB">All Games</a>
+      <a href="/tools.html" class="MainB">Tools</a>
+      <a href="/changelog.html" class="MainB">Changelog</a>
+    </nav>
 
-    <div class="gametemplate">
-      <img class="gameimage" src="https://media1.tenor.com/m/QeyFuBQrWyYAAAAd/irobot-i-robot.gif">
-      <h1 class="gamename">Game Name</h1>
-    </div>
-    
     <div id="gameholder"></div>
-    
+
     <script>
-async function LoadGames() {
-    const jsonUrl = "https://raw.githubusercontent.com/usheje883-maker/Activity-Lab-Special/main/files.json";
-    const gameholder = document.getElementById("gameholder");
+      async function LoadGames() {
+        const jsonUrl = "https://raw.githubusercontent.com/usheje883-maker/Activity-Lab-Special/main/files.json";
+        const gameholder = document.getElementById("gameholder");
 
-    if (!gameholder) {
-        console.error("Could not find #gameholder");
-        return;
-    }
-
-    try {
-        const response = await fetch(jsonUrl);
-
-        if (!response.ok) {
-            throw new Error(`Failed to fetch games.json: ${response.status}`);
+        if (!gameholder) {
+          console.error("Could not find #gameholder");
+          return;
         }
 
-        const games = await response.json();
-        gameholder.innerHTML = "";
+        try {
+          const response = await fetch(jsonUrl);
 
-        for (const game of games) {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch games.json: ${response.status}`);
+          }
+
+          const games = await response.json();
+          gameholder.innerHTML = "";
+
+          const fragment = document.createDocumentFragment();
+
+          for (const game of games) {
             const name = game.name || "Unknown Game";
             const image = game.image || "";
             const link = game.link || "";
 
-            console.log(`Loaded game: "${name}"`);
-            console.log(`Game path: "${link}"`);
+            const card = document.createElement(link ? "a" : "div");
+            card.className = "gameobject";
 
-            const template = document.createElement("div");
-            template.className = "gameobject";
+            if (link) {
+              card.href = `iframe.html?url=${encodeURIComponent(link)}`;
+            }
 
             const gameImage = document.createElement("img");
             gameImage.className = "gameimage";
@@ -63,28 +63,18 @@ async function LoadGames() {
             gameName.className = "gamename";
             gameName.textContent = name;
 
-            template.appendChild(gameImage);
-            template.appendChild(gameName);
+            card.appendChild(gameImage);
+            card.appendChild(gameName);
+            fragment.appendChild(card);
+          }
 
-            if (link) {
-                template.style.cursor = "pointer";
-
-                template.addEventListener("click", function () {
-                    window.location.href =
-                        `iframe.html?${encodeURIComponent(link)}`;
-                });
-            }
-
-            gameholder.appendChild(template);
+          gameholder.appendChild(fragment);
+        } catch (error) {
+          console.error("Error loading games:", error);
         }
+      }
 
-    } catch (error) {
-        console.error("Error loading games:", error);
-    }
-}
-
-document.addEventListener("DOMContentLoaded", LoadGames);
-</script>
-    
+      document.addEventListener("DOMContentLoaded", LoadGames);
+    </script>
   </body>
 </html>
