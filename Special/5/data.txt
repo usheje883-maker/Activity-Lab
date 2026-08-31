@@ -1,3 +1,0 @@
-World Box
-/Special/5/image.png
-/Special/5/Files/index.html
