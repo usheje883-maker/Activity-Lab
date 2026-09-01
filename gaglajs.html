@@ -21,6 +21,13 @@
     <div id="gameholder"></div>
 
     <script>
+      function formatImageUrl(url) {
+        if (!url) return "";
+        return url
+          .replace("github.com", "raw.githubusercontent.com")
+          .replace("/blob/", "/");
+      }
+
       async function LoadGames() {
         const jsonUrl = "https://raw.githubusercontent.com/usheje883-maker/Activity-Lab-Special/main/files.json";
         const gameholder = document.getElementById("gameholder");
@@ -44,7 +51,7 @@
 
           for (const game of games) {
             const name = game.name || "Unknown Game";
-            const image = game.image || "";
+            const image = formatImageUrl(game.image || "");
             const link = game.link || "";
 
             const card = document.createElement(link ? "a" : "div");
@@ -59,6 +66,7 @@
             gameImage.src = image;
             gameImage.alt = name;
 
+
             const gameName = document.createElement("h1");
             gameName.className = "gamename";
             gameName.textContent = name;
@@ -71,6 +79,7 @@
           gameholder.appendChild(fragment);
         } catch (error) {
           console.error("Error loading games:", error);
+          gameholder.innerHTML = "<p>Failed to load activity list.</p>";
         }
       }
 
