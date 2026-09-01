@@ -19,91 +19,29 @@
 
     <div id="gameholder"></div>
 
-    <script>
-      const GITHUB_USER = "usheje883-maker";
-const GITHUB_REPO = "Activity-Lab-Special";
-const BRANCH = "main";
+   <script>
+    function loadGame() {
+      const params = new URLSearchParams(window.location.search);
+      let gameUrl = params.get("url");
 
-function formatUrl(url) {
-  if (!url) return "";
-
-  if (url.includes("github.com")) {
-    return url
-      .replace("github.com", "cdn.jsdelivr.net/gh")
-      .replace("/blob/main/", "@main/")
-      .replace("/tree/main/", "@main/");
-  }
-
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    return url;
-  }
-
-  const cleanPath = url.startsWith("/") ? url.slice(1) : url;
-  return `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${BRANCH}/${cleanPath}`;
-}
-
-async function LoadGames() {
-  const gameholder = document.getElementById("gameholder");
-  if (!gameholder) return;
-
-  const cdnJson = `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${BRANCH}/files.json`;
-  const rawJson = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${BRANCH}/files.json`;
-
-  try {
-    let response = await fetch(cdnJson);
-
-    if (!response.ok) {
-      console.warn(`jsDelivr returned ${response.status}. Retrying with raw GitHub...`);
-      response = await fetch(rawJson);
-    }
-
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status} - Check if files.json exists at repo root.`);
-    }
-
-    const games = await response.json();
-    gameholder.innerHTML = "";
-    const fragment = document.createDocumentFragment();
-
-    for (const game of games) {
-      const name = game.name || "Unknown Game";
-      const image = formatUrl(game.image || "");
-      const executableLink = formatUrl(game.link || "");
-
-      const card = document.createElement(executableLink ? "a" : "div");
-      card.className = "gameobject";
-
-      if (executableLink) {
-        card.href = `iframe.html?url=${encodeURIComponent(executableLink)}`;
+      if (!gameUrl) {
+        document.body.innerHTML = `<h2 class="error-message">No game URL provided.</h2>`;
+        return;
       }
 
-      const gameImage = document.createElement("img");
-      gameImage.className = "gameimage";
-      gameImage.src = image;
-      gameImage.alt = name;
+      gameUrl = decodeURIComponent(gameUrl);
 
-      gameImage.onerror = () => {
-        console.warn(`Image 404: ${image}`);
-        gameImage.style.display = "none";
-      };
+      if (gameUrl.startsWith("https:/") && !gameUrl.startsWith("https://")) {
+        gameUrl = gameUrl.replace("https:/", "https://");
+      } else if (gameUrl.startsWith("http:/") && !gameUrl.startsWith("http://")) {
+        gameUrl = gameUrl.replace("http:/", "http://");
+      }
 
-      const gameName = document.createElement("h1");
-      gameName.className = "gamename";
-      gameName.textContent = name;
-
-      card.appendChild(gameImage);
-      card.appendChild(gameName);
-      fragment.appendChild(card);
+      const iframe = document.getElementById("gameFrame");
+      iframe.src = gameUrl;
     }
 
-    gameholder.appendChild(fragment);
-  } catch (error) {
-    console.error("Error loading games:", error);
-    gameholder.innerHTML = `<p style="color:red;">Failed to load activity list: ${error.message}</p>`;
-  }
-}
-
-document.addEventListener("DOMContentLoaded", LoadGames);
-    </script>
+    document.addEventListener("DOMContentLoaded", loadGame);
+  </script>
   </body>
 </html>
