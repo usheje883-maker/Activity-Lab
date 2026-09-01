@@ -118,5 +118,20 @@
     "name": "Postal",
     "image": "Games/23/image.png",
     "link": "Games/23/Files/index.html"
+  },
+  {
+    "name": "Hypper Sandbox",
+    "image": "Games/24/image.png",
+    "link": "Games/24/Files/index.html"
+  },
+  {
+    "name": "Hole.io",
+    "image": "Games/25/image.png",
+    "link": "Games/25/Files/index.html"
+  },
+  {
+    "name": "Airline Tycoon",
+    "image": "Games/26/image.png",
+    "link": "Games/26/Files/index.html"
   }
 ]
