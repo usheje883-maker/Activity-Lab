@@ -20,87 +20,90 @@
     <div id="gameholder"></div>
 
     <script>
-      const CDN_BASE = "https://cdn.jsdelivr.net/gh/usheje883-maker/Activity-Lab-Special@main/";
+      const GITHUB_USER = "usheje883-maker";
+const GITHUB_REPO = "Activity-Lab-Special";
+const BRANCH = "main";
 
-      function formatUrl(url) {
-        if (!url) return "";
+function formatUrl(url) {
+  if (!url) return "";
 
-        if (url.includes("github.com")) {
-          return url
-            .replace("github.com", "cdn.jsdelivr.net/gh")
-            .replace("/blob/main/", "@main/")
-            .replace("/tree/main/", "@main/");
-        }
+  if (url.includes("github.com")) {
+    return url
+      .replace("github.com", "cdn.jsdelivr.net/gh")
+      .replace("/blob/main/", "@main/")
+      .replace("/tree/main/", "@main/");
+  }
 
-        if (url.startsWith("http://") || url.startsWith("https://")) {
-          return url;
-        }
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
 
-        const cleanPath = url.startsWith("/") ? url.slice(1) : url;
-        return `${CDN_BASE}${cleanPath}`;
+  const cleanPath = url.startsWith("/") ? url.slice(1) : url;
+  return `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${BRANCH}/${cleanPath}`;
+}
+
+async function LoadGames() {
+  const gameholder = document.getElementById("gameholder");
+  if (!gameholder) return;
+
+  const cdnJson = `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${BRANCH}/files.json`;
+  const rawJson = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${BRANCH}/files.json`;
+
+  try {
+    let response = await fetch(cdnJson);
+
+    if (!response.ok) {
+      console.warn(`jsDelivr returned ${response.status}. Retrying with raw GitHub...`);
+      response = await fetch(rawJson);
+    }
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status} - Check if files.json exists at repo root.`);
+    }
+
+    const games = await response.json();
+    gameholder.innerHTML = "";
+    const fragment = document.createDocumentFragment();
+
+    for (const game of games) {
+      const name = game.name || "Unknown Game";
+      const image = formatUrl(game.image || "");
+      const executableLink = formatUrl(game.link || "");
+
+      const card = document.createElement(executableLink ? "a" : "div");
+      card.className = "gameobject";
+
+      if (executableLink) {
+        card.href = `iframe.html?url=${encodeURIComponent(executableLink)}`;
       }
 
-      async function LoadGames() {
-        const jsonUrl = `${CDN_BASE}files.json`;
-        const gameholder = document.getElementById("gameholder");
+      const gameImage = document.createElement("img");
+      gameImage.className = "gameimage";
+      gameImage.src = image;
+      gameImage.alt = name;
 
-        if (!gameholder) {
-          console.error("Could not find #gameholder");
-          return;
-        }
+      gameImage.onerror = () => {
+        console.warn(`Image 404: ${image}`);
+        gameImage.style.display = "none";
+      };
 
-        try {
-          const response = await fetch(jsonUrl);
+      const gameName = document.createElement("h1");
+      gameName.className = "gamename";
+      gameName.textContent = name;
 
-          if (!response.ok) {
-            throw new Error(`Failed to fetch files.json: ${response.status}`);
-          }
+      card.appendChild(gameImage);
+      card.appendChild(gameName);
+      fragment.appendChild(card);
+    }
 
-          const games = await response.json();
-          gameholder.innerHTML = "";
+    gameholder.appendChild(fragment);
+  } catch (error) {
+    console.error("Error loading games:", error);
+    gameholder.innerHTML = `<p style="color:red;">Failed to load activity list: ${error.message}</p>`;
+  }
+}
 
-          const fragment = document.createDocumentFragment();
-
-          for (const game of games) {
-            const name = game.name || "Unknown Game";
-            const image = formatUrl(game.image || "");
-            const rawGameLink = game.link || "";
-            const executableLink = formatUrl(rawGameLink);
-
-            const card = document.createElement(executableLink ? "a" : "div");
-            card.className = "gameobject";
-
-            if (executableLink) {
-              card.href = `iframe.html?url=${encodeURIComponent(executableLink)}`;
-            }
-
-            const gameImage = document.createElement("img");
-            gameImage.className = "gameimage";
-            gameImage.src = image;
-            gameImage.alt = name;
-
-            gameImage.onerror = () => {
-              console.warn(`Failed to load image at: ${image}`);
-              gameImage.style.display = "none";
-            };
-
-            const gameName = document.createElement("h1");
-            gameName.className = "gamename";
-            gameName.textContent = name;
-
-            card.appendChild(gameImage);
-            card.appendChild(gameName);
-            fragment.appendChild(card);
-          }
-
-          gameholder.appendChild(fragment);
-        } catch (error) {
-          console.error("Error loading games:", error);
-          gameholder.innerHTML = "<p>Failed to load activity list.</p>";
-        }
-      }
-
-      document.addEventListener("DOMContentLoaded", LoadGames);
+document.addEventListener("DOMContentLoaded", LoadGames);
     </script>
   </body>
 </html>
