@@ -113,5 +113,10 @@
     "name": "Drive Online",
     "image": "Games/22/image.png",
     "link": "Games/22/Files/index.html"
+  },
+  {
+    "name": "Postal",
+    "image": "Games/23/image.png",
+    "link": "Games/23/Files/index.html"
   }
 ]
