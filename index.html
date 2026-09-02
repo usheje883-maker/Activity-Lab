@@ -3,6 +3,11 @@
   <head>
     <title>Activity Lab | Activity List</title>
     <link rel="stylesheet" href="style.css" />
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3828955115174115"
+            crossorigin="anonymous">
+    </script>
+    
   </head>
   <body>
     <div class="topper">
@@ -15,13 +20,29 @@
       <button class="MainB" onclick="location.href='/tools.html'">Tools</button>
     </div>
 
-    <div class="gametemplate">
-      <img class="gameimage" src="https://media1.tenor.com/m/QeyFuBQrWyYAAAAd/irobot-i-robot.gif">
-      <h1 class="gamename">Game Name</h1>
+    <div class="layout-wrapper">
+      <div class="main-content">
+        <div class="gametemplate">
+          <img class="gameimage" src="https://media1.tenor.com/m/QeyFuBQrWyYAAAAd/irobot-i-robot.gif">
+          <h1 class="gamename">Game Name</h1>
+        </div>
+
+        <div id="gameholder"></div>
+      </div>
+
+      <aside class="ad-sidebar">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-3828955115174115"
+             data-ad-slot="YOUR_AD_SLOT_ID"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </aside>
     </div>
-    
-    <div id="gameholder"></div>
-    
+
     <script>
 async function LoadGames() {
     const jsonUrl = "https://raw.githubusercontent.com/usheje883-maker/Activity-Lab/main/games.json";
@@ -84,6 +105,5 @@ async function LoadGames() {
 
 document.addEventListener("DOMContentLoaded", LoadGames);
 </script>
-    
   </body>
 </html>
