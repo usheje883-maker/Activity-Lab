@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Spaceflight Simulator",
+    "image": "Files/1/image.png",
+    "link": "Files/1/Files/index.html"
+  },
+  {
+    "name": "60 Seconds",
+    "image": "Files/2/image.png",
+    "link": "Files/2/Files/index.html"
+  },
+  {
+    "name": "Among Us",
+    "image": "Files/3/image.png",
+    "link": "Files/3/Files/index.html"
+  },
+  {
+    "name": "Hollow Knight",
+    "image": "Files/4/image.png",
+    "link": "Files/4/Files/index.html"
+  },
+  {
+    "name": "World Box",
+    "image": "Files/5/image.png",
+    "link": "Files/5/Files/index.html"
+  },
+  {
+    "name": "How To Fish",
+    "image": "Files/6/image.png",
+    "link": "Files/6/Files/index.html"
+  }
+]
