@@ -1,54 +1,79 @@
 <!DOCTYPE html>
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <title>Activity Lab | Activity List</title>
     <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
     <div class="topper">
       <h1>Activity Lab</h1>
     </div>
 
-    <div class="subtopper">
-      <button class="MainB" onclick="location.href='/gaglajs.html'">Back</button>
-      <button class="MainB" onclick="openInBlank()">Fullscreen</button>
-    </div>
+<div class="subtopper">
+  <button class="MainB" onclick="location.href='/gaglajs.html'">Back</button>
+  <button class="MainB" onclick="openInBlank()">Fullscreen</button>
+</div>
 
-    <iframe class="gameplayer"></iframe>
+<iframe class="gameplayer"></iframe>
 
-    <script>
-      const fullQuery = window.location.search.substring(1);
-      const pageIframe = document.querySelector('.gameplayer');
+<script>
+  const gamePath = decodeURIComponent(window.location.search.substring(1));
+  const pageIframe = document.querySelector(".gameplayer");
 
-      if (fullQuery) {
-        pageIframe.src = decodeURIComponent(fullQuery);
-      }
+  if (gamePath) {
+    const gameUrl =
+      "https://cdn.jsdelivr.net/gh/usheje883-maker/Activity-Lab-Special@main/" +
+      gamePath;
 
-      function openInBlank() {
-        const newWindow = window.open('about:blank', '_blank');
+    pageIframe.src = gameUrl;
+  }
 
-        if (newWindow) {
-          const popupIframe = newWindow.document.createElement('iframe');
-          popupIframe.src = decodeURIComponent(fullQuery);
-          popupIframe.style.position = 'fixed';
-          popupIframe.style.top = '0';
-          popupIframe.style.left = '0';
-          popupIframe.style.width = '100vw';
-          popupIframe.style.height = '100vh';
-          popupIframe.style.border = 'none';
-          popupIframe.style.margin = '0';
-          popupIframe.style.padding = '0';
-          popupIframe.style.overflow = 'hidden';
+  function openInBlank() {
+    if (!gamePath) return;
 
-          newWindow.document.title = 'Home - Classroom';
+    const gameUrl =
+      "https://cdn.jsdelivr.net/gh/usheje883-maker/Activity-Lab-Special@main/" +
+      gamePath;
 
-          newWindow.document.body.style.margin = '0';
-          newWindow.document.body.appendChild(popupIframe);
-        } else {
-          alert("allow pop-ups man");
-        }
-      }
-    </script>
+    const newWindow = window.open("about:blank", "_blank");
+
+    if (newWindow) {
+      newWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Home - Classroom</title>
+            <style>
+              html, body {
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                background: black;
+              }
+
+              iframe {
+                width: 100%;
+                height: 100%;
+                border: none;
+              }
+            </style>
+          </head>
+
+          <body>
+            <iframe src="${gameUrl}"></iframe>
+          </body>
+        </html>
+      `);
+
+      newWindow.document.close();
+    } else {
+      alert("Please allow pop-ups.");
+    }
+  }
+</script>
   </body>
 </html>
