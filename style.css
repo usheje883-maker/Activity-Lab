@@ -56,6 +56,28 @@ body {
     transform: scale(1.1);
 }
 
+.layout-wrapper {
+    display: flex;
+    gap: 25px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 25px;
+}
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.ad-sidebar {
+    width: 300px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 25px;
+    align-self: flex-start;
+}
+
 .gametemplate {
     display: none;
 }
@@ -106,7 +128,6 @@ body {
 #gameholder {
     width: 100%;
     min-height: 75vh;
-    padding: 25px;
     display: grid;
     grid-template-columns: repeat(auto-fill, 200px);
     justify-content: center;
