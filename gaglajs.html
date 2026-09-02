@@ -19,29 +19,75 @@
 
     <div id="gameholder"></div>
 
-   <script>
-    function loadGame() {
-      const params = new URLSearchParams(window.location.search);
-      let gameUrl = params.get("url");
+<script>
+async function LoadGames() {
+    const jsonUrl = "https://raw.githubusercontent.com/usheje883-maker/Activity-Lab-Special/main/files.json";
+    const gameholder = document.getElementById("gameholder");
 
-      if (!gameUrl) {
-        document.body.innerHTML = `<h2 class="error-message">No game URL provided.</h2>`;
+    if (!gameholder) {
+        console.error("Could not find #gameholder");
         return;
-      }
-
-      gameUrl = decodeURIComponent(gameUrl);
-
-      if (gameUrl.startsWith("https:/") && !gameUrl.startsWith("https://")) {
-        gameUrl = gameUrl.replace("https:/", "https://");
-      } else if (gameUrl.startsWith("http:/") && !gameUrl.startsWith("http://")) {
-        gameUrl = gameUrl.replace("http:/", "http://");
-      }
-
-      const iframe = document.getElementById("gameFrame");
-      iframe.src = gameUrl;
     }
 
-    document.addEventListener("DOMContentLoaded", loadGame);
-  </script>
+    try {
+        const response = await fetch(jsonUrl);
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch files.json: ${response.status}`);
+        }
+
+        const games = await response.json();
+        gameholder.innerHTML = "";
+
+        for (const game of games) {
+            const name = game.name || "Unknown Game";
+            const image = game.image || "";
+            const link = game.link || "";
+
+            const template = document.createElement("div");
+            template.className = "gameobject";
+
+            const gameImage = document.createElement("img");
+            gameImage.className = "gameimage";
+
+            if (image) {
+                gameImage.src =
+                    "https://cdn.jsdelivr.net/gh/usheje883-maker/Activity-Lab-Special@main/" +
+                    image;
+            }
+
+            gameImage.alt = name;
+
+            const gameName = document.createElement("h1");
+            gameName.className = "gamename";
+            gameName.textContent = name;
+
+            template.appendChild(gameImage);
+            template.appendChild(gameName);
+
+            if (link) {
+                template.style.cursor = "pointer";
+
+                template.addEventListener("click", function () {
+                    const fileUrl =
+                        "https://cdn.jsdelivr.net/gh/usheje883-maker/Activity-Lab-Special@main/" +
+                        link;
+
+                    window.location.href =
+                        `iframe.html?${encodeURIComponent(fileUrl)}`;
+                });
+            }
+
+            gameholder.appendChild(template);
+        }
+
+    } catch (error) {
+        console.error("Error loading games:", error);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", LoadGames);
+</script>
+
   </body>
 </html>
