@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <title>Activity Lab | Activity List</title>
     <link rel="stylesheet" href="style.css" />
@@ -7,92 +7,83 @@
   <body>
     <div class="topper">
       <h1>Activity Lab</h1>
-      <p>V0.5</p>
+      <p1>V0.5</p1>
     </div>
 
     <div class="subtopper">
       <button class="MainB" onclick="location.href='/index.html'">All Games</button>
       <button class="MainB" onclick="location.href='/tools.html'">Tools</button>
     </div>
-	  
+
+    <div class="gametemplate">
+      <img class="gameimage" src="https://media1.tenor.com/m/QeyFuBQrWyYAAAAd/irobot-i-robot.gif">
+      <h1 class="gamename">Game Name</h1>
+    </div>
+    
     <div id="gameholder"></div>
-	  
-	  <script>
-  const GITHUB_RAW_BASE = "https://raw.githubusercontent.com/usheje883-maker/Activity-Lab-Special/main/";
-
-  function formatImageUrl(url) {
-    if (!url) return "";
-
-    if (url.startsWith("http://") || url.startsWith("https://")) {
-      return url
-        .replace("github.com", "raw.githubusercontent.com")
-        .replace("/blob/", "/");
-    }
-
-    const cleanPath = url.startsWith("/") ? url.slice(1) : url;
-    return `${GITHUB_RAW_BASE}${cleanPath}`;
-  }
-
-  async function LoadGames() {
-    const jsonUrl = `${GITHUB_RAW_BASE}files.json`;
+    
+    <script>
+async function LoadGames() {
+    const jsonUrl = "https://raw.githubusercontent.com/usheje883-maker/Activity-Lab/main/files.json";
     const gameholder = document.getElementById("gameholder");
 
     if (!gameholder) {
-      console.error("Could not find #gameholder");
-      return;
+        console.error("Could not find #gameholder");
+        return;
     }
 
     try {
-      const response = await fetch(jsonUrl);
+        const response = await fetch(jsonUrl);
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch games.json: ${response.status}`);
-      }
-
-      const games = await response.json();
-      gameholder.innerHTML = "";
-
-      const fragment = document.createDocumentFragment();
-
-      for (const game of games) {
-        const name = game.name || "Unknown Game";
-        const image = formatImageUrl(game.image || "");
-        const link = game.link || "";
-
-        const card = document.createElement(link ? "a" : "div");
-        card.className = "gameobject";
-
-        if (link) {
-          card.href = `iframe.html?url=${encodeURIComponent(link)}`;
+        if (!response.ok) {
+            throw new Error(`Failed to fetch files.json: ${response.status}`);
         }
 
-        const gameImage = document.createElement("img");
-        gameImage.className = "gameimage";
-        gameImage.src = image;
-        gameImage.alt = name;
+        const games = await response.json();
+        gameholder.innerHTML = "";
 
-        gameImage.onerror = () => {
-          console.warn(`Failed to load image at: ${image}`);
-          gameImage.style.display = "none";
-        };
+        for (const game of games) {
+            const name = game.name || "Unknown Game";
+            const image = game.image || "";
+            const link = game.link || "";
 
-        const gameName = document.createElement("h1");
-        gameName.className = "gamename";
-        gameName.textContent = name;
+            console.log(`Loaded game: "${name}"`);
+            console.log(`Game path: "${link}"`);
 
-        card.appendChild(gameImage);
-        card.appendChild(gameName);
-        fragment.appendChild(card);
-      }
+            const template = document.createElement("div");
+            template.className = "gameobject";
 
-      gameholder.appendChild(fragment);
+            const gameImage = document.createElement("img");
+            gameImage.className = "gameimage";
+            gameImage.src = image;
+            gameImage.alt = name;
+
+            const gameName = document.createElement("h1");
+            gameName.className = "gamename";
+            gameName.textContent = name;
+
+            template.appendChild(gameImage);
+            template.appendChild(gameName);
+
+            if (link) {
+                template.style.cursor = "pointer";
+
+                template.addEventListener("click", function () {
+                    window.location.href =
+                        `iframe.html?${encodeURIComponent(link)}`;
+                });
+            }
+
+            gameholder.appendChild(template);
+        }
+
     } catch (error) {
-      console.error("Error loading games:", error);
-      gameholder.innerHTML = "<p>Failed to load activity list.</p>";
+        console.error("Error loading games:", error);
     }
-  }
+}
 
-  document.addEventListener("DOMContentLoaded", LoadGames);
+document.addEventListener("DOMContentLoaded", LoadGames);
 </script>
+    
   </body>
 </html>
