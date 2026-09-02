@@ -1,103 +1,103 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Activity Lab | Activity List</title>
-    <link rel="stylesheet" href="style.css" />
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3828955115174115"
-     crossorigin="anonymous"></script>
-  </head>
-  <body>
-    <div class="topper">
-      <h1>Activity Lab</h1>
-      <p1>V0.5</p1>
-    </div>
+	<head>
+		<title>Activity Lab | Activity List</title>
+		<link rel="stylesheet" href="style.css" />
+		<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3828955115174115"
+		 crossorigin="anonymous"></script>
+	</head>
+	<body>
+		<div class="topper">
+			<h1>Activity Lab</h1>
+			<p1>V0.5</p1>
+		</div>
 
-    <div class="subtopper">
-      <button class="MainB" onclick="location.href='/index.html'">All Games</button>
-      <button class="MainB" onclick="location.href='/tools.html'">Tools</button>
-    </div>
+		<div class="subtopper">
+			<button class="MainB" onclick="location.href='/index.html'">All Games</button>
+			<button class="MainB" onclick="location.href='/tools.html'">Tools</button>
+		</div>
 
-    <div class="gametemplate">
-      <img class="gameimage" src="https://media1.tenor.com/m/QeyFuBQrWyYAAAAd/irobot-i-robot.gif">
-      <h1 class="gamename">Game Name</h1>
-    </div>
-    
-    <div id="gameholder"></div>
+		<div class="gametemplate">
+			<img class="gameimage" src="https://media1.tenor.com/m/QeyFuBQrWyYAAAAd/irobot-i-robot.gif">
+				<h1 class="gamename">Game Name</h1>
+			</div>
 
-    <div class="ad-container">
-      <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-client="ca-pub-3828955115174115"
-           data-ad-slot="8736275066"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-    </div>
-    
-    <script>
-async function LoadGames() {
+		<div id="gameholder"></div>
 
-    (adsbygoogle = window.adsbygoogle || []).push({});
-    
-    const jsonUrl = "https://raw.githubusercontent.com/usheje883-maker/Activity-Lab/main/games.json";
-    const gameholder = document.getElementById("gameholder");
+		<div class="ad-container">
+			<ins class="adsbygoogle"
+				 style="display:block"
+				 data-ad-client="ca-pub-3828955115174115"
+				 data-ad-slot="8736275066"
+				 data-ad-format="auto"
+				 data-full-width-responsive="true"></ins>
+		</div>
 
-    if (!gameholder) {
-        console.error("Could not find #gameholder");
-        return;
-    }
+		<script>
+			async function LoadGames() {
 
-    try {
-        const response = await fetch(jsonUrl);
+			(adsbygoogle = window.adsbygoogle || []).push({});
 
-        if (!response.ok) {
-            throw new Error(`Failed to fetch games.json: ${response.status}`);
-        }
+			const jsonUrl = "https://raw.githubusercontent.com/usheje883-maker/Activity-Lab/main/games.json";
+			const gameholder = document.getElementById("gameholder");
 
-        const games = await response.json();
-        gameholder.innerHTML = "";
+			if (!gameholder) {
+			console.error("Could not find #gameholder");
+			return;
+			}
 
-        for (const game of games) {
-            const name = game.name || "Unknown Game";
-            const image = game.image || "";
-            const link = game.link || "";
+			try {
+			const response = await fetch(jsonUrl);
 
-            console.log(`Loaded game: "${name}"`);
-            console.log(`Game path: "${link}"`);
+			if (!response.ok) {
+			throw new Error(`Failed to fetch games.json: ${response.status}`);
+			}
 
-            const template = document.createElement("div");
-            template.className = "gameobject";
+			const games = await response.json();
+			gameholder.innerHTML = "";
 
-            const gameImage = document.createElement("img");
-            gameImage.className = "gameimage";
-            gameImage.src = image;
-            gameImage.alt = name;
+			for (const game of games) {
+			const name = game.name || "Unknown Game";
+			const image = game.image || "";
+			const link = game.link || "";
 
-            const gameName = document.createElement("h1");
-            gameName.className = "gamename";
-            gameName.textContent = name;
+			console.log(`Loaded game: "${name}"`);
+			console.log(`Game path: "${link}"`);
 
-            template.appendChild(gameImage);
-            template.appendChild(gameName);
+			const template = document.createElement("div");
+			template.className = "gameobject";
 
-            if (link) {
-                template.style.cursor = "pointer";
+			const gameImage = document.createElement("img");
+			gameImage.className = "gameimage";
+			gameImage.src = image;
+			gameImage.alt = name;
 
-                template.addEventListener("click", function () {
-                    window.location.href =
-                        `iframe.html?${encodeURIComponent(link)}`;
-                });
-            }
+			const gameName = document.createElement("h1");
+			gameName.className = "gamename";
+			gameName.textContent = name;
 
-            gameholder.appendChild(template);
-        }
+			template.appendChild(gameImage);
+			template.appendChild(gameName);
 
-    } catch (error) {
-        console.error("Error loading games:", error);
-    }
-}
+			if (link) {
+			template.style.cursor = "pointer";
 
-document.addEventListener("DOMContentLoaded", LoadGames);
-</script>
-    
-  </body>
+			template.addEventListener("click", function () {
+			window.location.href =
+			`iframe.html?${encodeURIComponent(link)}`;
+			});
+			}
+
+			gameholder.appendChild(template);
+			}
+
+			} catch (error) {
+			console.error("Error loading games:", error);
+			}
+			}
+
+			document.addEventListener("DOMContentLoaded", LoadGames);
+		</script>
+
+	</body>
 </html>
