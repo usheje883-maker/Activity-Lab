@@ -1,232 +1,278 @@
 [
-    {
+  {
     "name": "Game Suggestion",
     "image": "Storage/gs.png",
-    "link": "https://docs.google.com/forms/d/e/1FAIpQLSd8HM7-E0vftKd_N-IbGhE73oC8H6h_2msHxqAIw4Oq6gtGZQ/viewform?usp=header"
+    "link": "https://docs.google.com/forms/d/e/1FAIpQLSd8HM7-E0vftKd_N-IbGhE73oC8H6h_2msHxqAIw4Oq6gtGZQ/viewform?usp=header",
+    "genre": "Simulator"
   },
   {
     "name": "Gun Spin",
     "image": "Games/1/image.png",
-    "link": "Games/1/Files/index.html"
+    "link": "Games/1/Files/index.html",
+    "genre": "Gun"
   },
   {
     "name": "Drift Hunters",
     "image": "Games/2/image.png",
-    "link": "Games/2/Files/index.html"
+    "link": "Games/2/Files/index.html",
+    "genre": "Car"
   },
   {
     "name": "Zombie Rush",
     "image": "Games/3/image.png",
-    "link": "Games/3/Files/index.html"
+    "link": "Games/3/Files/index.html",
+    "genre": "Survival"
   },
   {
     "name": "Escape Road",
     "image": "Games/4/image.png",
-    "link": "Games/4/Files/index.html"
+    "link": "Games/4/Files/index.html",
+    "genre": "Car"
   },
   {
     "name": "Eggy Car",
     "image": "Games/5/image.png",
-    "link": "Games/5/Files/index.html"
+    "link": "Games/5/Files/index.html",
+    "genre": "Car"
   },
   {
     "name": "Eaglercraft 1.16",
     "image": "Games/6/image.png",
-    "link": "Games/6/Files/index.html"
+    "link": "Games/6/Files/index.html",
+    "genre": "Survival"
   },
   {
     "name": "Rooftop Snipers 2",
     "image": "Games/7/image.png",
-    "link": "Games/7/Files/index.html"
+    "link": "Games/7/Files/index.html",
+    "genre": "Gun"
   },
   {
     "name": "Eaglercraft 1.21.11",
     "image": "Games/8/image.png",
-    "link": "Games/8/Files/index.html"
+    "link": "Games/8/Files/index.html",
+    "genre": "Survival"
   },
   {
     "name": "Five Nights With Mac Tonight",
     "image": "Games/9/image.png",
-    "link": "Games/9/Files/index.html"
+    "link": "Games/9/Files/index.html",
+    "genre": "Survival"
   },
   {
     "name": "Kour.Io",
     "image": "Games/10/image.png",
-    "link": "Games/10/Files/index.html"
+    "link": "Games/10/Files/index.html",
+    "genre": "Multiplayer"
   },
   {
     "name": "Bounce Masters",
     "image": "Games/11/image.png",
-    "link": "Games/11/Files/index.html"
+    "link": "Games/11/Files/index.html",
+    "genre": "Idle game"
   },
   {
     "name": "Slope",
     "image": "Games/12/image.png",
-    "link": "Games/12/Files/index.html"
+    "link": "Games/12/Files/index.html",
+    "genre": "Simulator"
   },
   {
     "name": "There Is No Game",
     "image": "Games/13/image.png",
-    "link": "Games/13/Files/index.html"
+    "link": "Games/13/Files/index.html",
+    "genre": "Simulator"
   },
   {
     "name": "A Dance Of Fire And Ice",
     "image": "Games/14/image.png",
-    "link": "Games/14/Files/index.html"
+    "link": "Games/14/Files/index.html",
+    "genre": "Simulator"
   },
   {
     "name": "AdVenture! Capitalist",
     "image": "Games/15/image.png",
-    "link": "Games/15/Files/index.html"
+    "link": "Games/15/Files/index.html",
+    "genre": "Idle game"
   },
   {
     "name": "Escape Road 2",
     "image": "Games/16/image.png",
-    "link": "Games/16/Files/index.html"
+    "link": "Games/16/Files/index.html",
+    "genre": "Car"
   },
   {
     "name": "P.V.Z. G.O.T.Y.",
     "image": "Games/17/image.png",
-    "link": "Games/17/Files/index.html"
+    "link": "Games/17/Files/index.html",
+    "genre": "Survival"
   },
   {
     "name": "Bitlife",
     "image": "Games/18/image.png",
-    "link": "Games/18/Files/index.html"
+    "link": "Games/18/Files/index.html",
+    "genre": "Simulator"
   },
   {
     "name": "Bit Planes",
     "image": "Games/19/image.png",
-    "link": "Games/19/Files/index.html"
+    "link": "Games/19/Files/index.html",
+    "genre": "Simulator"
   },
   {
     "name": "1v1.lol",
     "image": "Games/20/image.png",
-    "link": "Games/20/Files/index.html"
+    "link": "Games/20/Files/index.html",
+    "genre": "Multiplayer"
   },
   {
     "name": "Poly Track",
     "image": "Games/21/image.png",
-    "link": "Games/21/Files/index.html"
+    "link": "Games/21/Files/index.html",
+    "genre": "Car"
   },
   {
     "name": "Drive Online",
     "image": "Games/22/image.png",
-    "link": "Games/22/Files/index.html"
+    "link": "Games/22/Files/index.html",
+    "genre": "Car"
   },
   {
     "name": "Postal",
     "image": "Games/23/image.png",
-    "link": "Games/23/Files/index.html"
+    "link": "Games/23/Files/index.html",
+    "genre": "Gun"
   },
   {
     "name": "Hypper Sandbox",
     "image": "Games/24/image.png",
-    "link": "Games/24/Files/index.html"
+    "link": "Games/24/Files/index.html",
+    "genre": "Simulator"
   },
   {
     "name": "Hole.io",
     "image": "Games/25/image.png",
-    "link": "Games/25/Files/index.html"
+    "link": "Games/25/Files/index.html",
+    "genre": "Multiplayer"
   },
   {
     "name": "Airline Tycoon",
     "image": "Games/26/image.png",
-    "link": "Games/26/Files/index.html"
+    "link": "Games/26/Files/index.html",
+    "genre": "Simulator"
   },
   {
     "name": "Project Box F.N.A.F.",
     "image": "Games/27/image.png",
-    "link": "Games/27/Files/index.html"
+    "link": "Games/27/Files/index.html",
+    "genre": "Survival"
   },
   {
     "name": "Backrooms 2D",
     "image": "Games/28/image.png",
-    "link": "Games/28/Files/index.html"
+    "link": "Games/28/Files/index.html",
+    "genre": "Survival"
   },
   {
     "name": "Karlson 2D",
     "image": "Games/29/image.png",
-    "link": "Games/29/Files/index.html"
+    "link": "Games/29/Files/index.html",
+    "genre": "Gun"
   },
   {
     "name": "Jetpack Joyride",
     "image": "Games/30/image.png",
-    "link": "Games/30/Files/index.html"
+    "link": "Games/30/Files/index.html",
+    "genre": "Survival"
   },
   {
     "name": "Idle Breakout",
     "image": "Games/31/image.png",
-    "link": "Games/31/Files/index.html"
+    "link": "Games/31/Files/index.html",
+    "genre": "Idle game"
   },
   {
     "name": "Idle Dice",
     "image": "Games/32/image.png",
-    "link": "Games/32/Files/index.html"
+    "link": "Games/32/Files/index.html",
+    "genre": "Idle game"
   },
   {
     "name": "Dogeminer",
     "image": "Games/33/image.png",
-    "link": "Games/33/Files/index.html"
+    "link": "Games/33/Files/index.html",
+    "genre": "Idle game"
   },
   {
     "name": "Cluster Rush",
     "image": "Games/34/image.png",
-    "link": "Games/34/Files/index.html"
+    "link": "Games/34/Files/index.html",
+    "genre": "Simulator"
   },
   {
     "name": "Buildnow.gg",
     "image": "Games/35/image.png",
-    "link": "Games/35/Files/index.html"
+    "link": "Games/35/Files/index.html",
+    "genre": "Multiplayer"
   },
   {
     "name": "Dogeminer 2",
     "image": "Games/36/image.png",
-    "link": "Games/36/Files/index.html"
+    "link": "Games/36/Files/index.html",
+    "genre": "Idle game"
   },
   {
     "name": "CS:GO Clicker",
     "image": "Games/37/image.png",
-    "link": "Games/37/Files/index.html"
+    "link": "Games/37/Files/index.html",
+    "genre": "Idle game"
   },
   {
     "name": "Snow Rider 3D",
     "image": "Games/38/image.png",
-    "link": "Games/38/Files/index.html"
+    "link": "Games/38/Files/index.html",
+    "genre": "Car"
   },
   {
     "name": "Paper.io 3D",
     "image": "Games/39/image.png",
-    "link": "Games/39/Files/index.html"
+    "link": "Games/39/Files/index.html",
+    "genre": "Multiplayer"
   },
   {
     "name": "Baseball Bros",
     "image": "Games/40/image.png",
-    "link": "Games/40/Files/index.html"
+    "link": "Games/40/Files/index.html",
+    "genre": "Multiplayer"
   },
   {
     "name": "Police Pursuit 2",
     "image": "Games/41/image.png",
-    "link": "Games/41/Files/index.html"
+    "link": "Games/41/Files/index.html",
+    "genre": "Car"
   },
   {
     "name": "Cookie Clicker",
     "image": "Games/42/image.png",
-    "link": "Games/42/Files/index.html"
+    "link": "Games/42/Files/index.html",
+    "genre": "Idle game"
   },
   {
     "name": "Battle Karts",
     "image": "Games/43/image.png",
-    "link": "Games/43/Files/index.html"
+    "link": "Games/43/Files/index.html",
+    "genre": "Car"
   },
   {
     "name": "Bow Masters",
     "image": "Games/44/image.png",
-    "link": "Games/44/Files/index.html"
+    "link": "Games/44/Files/index.html",
+    "genre": "Gun"
   },
   {
     "name": "Basketball FRVR",
     "image": "Games/45/image.png",
-    "link": "Games/45/Files/index.html"
+    "link": "Games/45/Files/index.html",
+    "genre": "Simulator"
   }
 ]
