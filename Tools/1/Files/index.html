@@ -7,7 +7,7 @@
     <meta name="color-scheme" content="light">
     
     <title>Aya Studio WASM</title>
-    <link rel="icon" type="image/png" href="/aya-studio.png"/>
+    <link rel="icon" type="image/png" href="aya-studio.png"/>
     <meta name="title" content="Aya Studio WASM" />
     <meta name="description" content="Work in progess port of Early 2016 Roblox Studio to web." />
     
@@ -138,7 +138,7 @@
   <body onload="init()">
     <figure id="qtspinner">
       <div class="qt-loader">
-        <img src="/aya-studio.png" width="150" height="150" alt="">
+        <img src="aya-studio.png" width="150" height="150" alt="">
         <strong>Qt for WebAssembly: Aya.Studio</strong>
         <progress id="qtprogress" aria-label="Application download progress"></progress>
         <div id="qtstatus" role="status" aria-live="polite">Preparing download...</div>
@@ -157,7 +157,7 @@
         // Emscripten still requests Aya.Studio.data so it can apply the Studio
         // preload layout, but the fetch override serves the identical package
         // shared by Player, Server, and Studio from one cache key.
-        const ayaStudioRuntimeDataUrl = new URL('Aya.Studio.data', window.location.origin).href;
+        const ayaStudioRuntimeDataUrl = new URL('Aya.Studio.data', window.location.href).href;
         const ayaStudioAddEventListener = EventTarget.prototype.addEventListener;
         EventTarget.prototype.addEventListener = function(type, listener, options) {
             if (type === 'wheel') {

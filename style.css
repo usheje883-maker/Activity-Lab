@@ -78,6 +78,19 @@ body {
     align-self: flex-start;
 }
 
+.ad-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 20px auto;
+    min-height: 100px;
+}
+
+.ad-container .adsbygoogle {
+    margin: 0 auto;
+}
+
 .gametemplate {
     display: none;
 }
