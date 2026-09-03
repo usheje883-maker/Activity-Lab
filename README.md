@@ -1,1 +1,1 @@
-A work in progress unblocked game site
+A simple unblocked game site that is updated a lot
