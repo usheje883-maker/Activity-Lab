@@ -139,7 +139,7 @@
     <figure id="qtspinner">
       <div class="qt-loader">
         <img src="/aya-studio.png" width="150" height="150" alt="">
-        <strong>Aya Studio WASM 3.0</strong>
+        <strong>Qt for WebAssembly: Aya.Studio</strong>
         <progress id="qtprogress" aria-label="Application download progress"></progress>
         <div id="qtstatus" role="status" aria-live="polite">Preparing download...</div>
         <noscript>JavaScript is disabled. Please enable JavaScript to use this application.</noscript>
@@ -151,8 +151,13 @@
     </div>
 
     <script type="text/javascript">
-        const ayaStudioBuildId = '20260723-legacy-settings-closed';
+        const ayaStudioBuildId = '051b32b21267782322c512f8';
         window.ayaStudioBuildId = ayaStudioBuildId;
+        const ayaStudioDataVersion = 'd21a64691936250e223dcee0';
+        // Emscripten still requests Aya.Studio.data so it can apply the Studio
+        // preload layout, but the fetch override serves the identical package
+        // shared by Player, Server, and Studio from one cache key.
+        const ayaStudioRuntimeDataUrl = new URL('Aya.Studio.data', window.location.origin).href;
         const ayaStudioAddEventListener = EventTarget.prototype.addEventListener;
         EventTarget.prototype.addEventListener = function(type, listener, options) {
             if (type === 'wheel') {
@@ -604,16 +609,31 @@
             if (!name)
                 return ayaStudioNativeFetch(input, init);
 
-            const request = input instanceof Request ? input : new Request(input, init);
+            let request = input instanceof Request ? input : new Request(input, init);
             if (request.method !== 'GET')
                 return ayaStudioNativeFetch(request);
 
-            const cache = await ayaStudioRuntimeCache();
+            // Keep the Studio preload filename while sharing the downloaded bytes.
+            const sharedData = name === 'Aya.Studio.data';
+            if (sharedData) {
+                const versionedRuntimeDataUrl =
+                    ayaStudioRuntimeDataUrl +
+                    (ayaStudioDataVersion.startsWith('data-') ? '' : `?v=${ayaStudioDataVersion}`);
+                if (new URL(request.url, window.location.href).href !== versionedRuntimeDataUrl)
+                    request = new Request(versionedRuntimeDataUrl, { headers: request.headers });
+            }
+
+            const cache = sharedData
+                ? await caches.open('ayawasm-runtime-v1').catch(() => null)
+                : await ayaStudioRuntimeCache();
             if (cache) {
                 const cached = await cache.match(request);
                 if (cached) {
-                    const size = ayaStudioStoredAssetSize(name) ||
-                        Number.parseInt(cached.headers.get('Content-Length') || '0', 10) || 1;
+                    const size = sharedData
+                        ? (Number.parseInt(cached.headers.get('x-aya-runtime-size') || '0', 10) ||
+                           Number.parseInt(cached.headers.get('Content-Length') || '0', 10) || 1)
+                        : (ayaStudioStoredAssetSize(name) ||
+                           Number.parseInt(cached.headers.get('Content-Length') || '0', 10) || 1);
                     ayaStudioUpdateDownload(name, {
                         started: true,
                         loaded: size,
@@ -634,7 +654,17 @@
                 return tracked;
 
             try {
-                await cache.put(request, tracked);
+                if (sharedData) {
+                    const headers = new Headers(tracked.headers);
+                    headers.delete('content-encoding');
+                    headers.delete('content-length');
+                    headers.delete('content-range');
+                    headers.delete('transfer-encoding');
+                    headers.set('x-aya-runtime-size', String(ayaStudioRuntimeDownloads.get(name)?.total || 0));
+                    await cache.put(request, new Response(await tracked.clone().arrayBuffer(), { headers }));
+                } else {
+                    await cache.put(request, tracked);
+                }
                 const cached = await cache.match(request);
                 if (cached)
                     return cached;
@@ -693,7 +723,7 @@
             if (Number.isFinite(requestedScale))
                 return Math.min(1, Math.max(0.5, requestedScale));
 
-            return Math.min(window.screen.width, window.screen.height) <= 600 ? 0.75 : 0.825;
+            return 0.8;
         })();
         window.ayaStudioUiScale = ayaStudioUiScale;
 
@@ -942,6 +972,26 @@
                 return (canvasId ? document.getElementById(canvasId) : null) ||
                     screen.querySelector(':scope > .aya-render-canvas');
             };
+
+            window.ayaInstallDiagnostics({
+                target: 'wasm-studio',
+                buildId: ayaStudioBuildId,
+                engineExport: 'aya_studio_wasm_get_engine_diagnostics',
+                getModule: () => qtInstance,
+                getRenderCanvas: activeRenderCanvas,
+                getTargetState: () => ({
+                    runtimeReady: Boolean(qtInstance),
+                    mobile: ayaStudioMobileDevice,
+                    uiScale: ayaStudioUiScale,
+                    renderCanvasRect: window.ayaStudioRenderCanvasRect || renderCanvasRect,
+                    renderCanvasSuppressed: window.ayaStudioRenderCanvasSuppressed,
+                    renderOverlayDisabled: window.ayaStudioRenderOverlayDisabled,
+                    renderStack: window.ayaStudioRenderStack || null,
+                    startupResize: window.ayaStudioStartupResize || null,
+                    qtShadowRootCount: window.ayaStudioQtShadowRootCount ?? null,
+                    pointerLock: window.ayaStudioPointerLockState || null
+                })
+            });
 
             const qtWindowSelector = '[id^="qt-window-"]';
             let qtRenderHostWindow = null;
@@ -1771,6 +1821,7 @@
         }
     </script>
     <script>
+        document.write(`<script src="${ayaStudioAsset('Aya.Diagnostics.js')}"><\/script>`);
         document.write(`<script src="${ayaStudioAsset('Aya.Studio.js')}"><\/script>`);
         document.write(`<script src="${ayaStudioAsset('qtloader.js')}"><\/script>`);
     </script>
