@@ -208,5 +208,25 @@
     "name": "Police Pursuit 2",
     "image": "Games/41/image.png",
     "link": "Games/41/Files/index.html"
-  }
+  },
+  {
+    "name": "Cookie Clicker",
+    "image": "Games/42/image.png",
+    "link": "Games/42/Files/index.html"
+  },
+  {
+    "name": "Battle Karts",
+    "image": "Games/43/image.png",
+    "link": "Games/43/Files/index.html"
+  },
+  {
+    "name": "Bow Masters",
+    "image": "Games/44/image.png",
+    "link": "Games/44/Files/index.html"
+  },
+  {
+    "name": "Basketball FRVR",
+    "image": "Games/45/image.png",
+    "link": "Games/45/Files/index.html"
+  },
 ]
