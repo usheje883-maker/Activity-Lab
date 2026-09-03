@@ -140,67 +140,72 @@
     "link": "Games/27/Files/index.html"
   },
   {
-    "name": "Placeholder",
+    "name": "Backrooms 2D",
     "image": "Games/28/image.png",
     "link": "Games/28/Files/index.html"
   },
   {
-    "name": "Gun Spin",
+    "name": "Karlson 2D",
     "image": "Games/29/image.png",
     "link": "Games/29/Files/index.html"
   },
   {
-    "name": "Drift Hunters",
+    "name": "Jetpack Joyride",
     "image": "Games/30/image.png",
     "link": "Games/30/Files/index.html"
   },
   {
-    "name": "Zombie Rush",
+    "name": "Idle Breakout",
     "image": "Games/31/image.png",
     "link": "Games/31/Files/index.html"
   },
   {
-    "name": "Escape Road",
+    "name": "Idle Dice",
     "image": "Games/32/image.png",
     "link": "Games/32/Files/index.html"
   },
   {
-    "name": "Eggy Car",
+    "name": "Dogeminer",
     "image": "Games/33/image.png",
-    "link": "Games/34/Files/index.html"
+    "link": "Games/33/Files/index.html"
   },
   {
     "name": "Eaglercraft 1.16",
+    "image": "Games/34/image.png",
+    "link": "Games/34/Files/index.html"
+  },
+  {
+    "name": "Buildnow.gg",
     "image": "Games/35/image.png",
     "link": "Games/35/Files/index.html"
   },
   {
-    "name": "Rooftop Snipers 2",
+    "name": "Dogeminer 2",
     "image": "Games/36/image.png",
     "link": "Games/36/Files/index.html"
   },
   {
-    "name": "Eaglercraft 1.21.11",
+    "name": "CS:GO Clicker",
     "image": "Games/37/image.png",
     "link": "Games/37/Files/index.html"
   },
   {
-    "name": "Five Nights With Mac Tonight",
+    "name": "Snow Rider 3D",
     "image": "Games/38/image.png",
     "link": "Games/38/Files/index.html"
   },
   {
-    "name": "Kour.Io",
+    "name": "Paper.io 3D",
     "image": "Games/39/image.png",
     "link": "Games/39/Files/index.html"
   },
   {
-    "name": "Bounce Masters",
+    "name": "Baseball Bros",
     "image": "Games/40/image.png",
     "link": "Games/40/Files/index.html"
   },
   {
-    "name": "Slope",
+    "name": "Police Pursuit 2",
     "image": "Games/41/image.png",
     "link": "Games/41/Files/index.html"
   }
