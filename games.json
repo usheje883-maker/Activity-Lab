@@ -300,7 +300,7 @@
     "genre": "FNF"
   },
   {
-      "name": "FNF MOD",
+    "name": "FNF MOD",
     "image": "Games/50/image.png",
     "link": "Games/50/Files/index.html",
     "genre": "FNF"
@@ -317,14 +317,14 @@
     "link": "Games/52/Files/index.html",
     "genre": "FNF"
   },
-    {
+  {
     "name": "FNF MOD",
     "image": "Games/53/image.png",
     "link": "Games/53/Files/index.html",
     "genre": "FNF"
   },
   {
-      "name": "FNF MOD",
+    "name": "FNF MOD",
     "image": "Games/54/image.png",
     "link": "Games/54/Files/index.html",
     "genre": "FNF"
