@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, height=device-height, user-scalable=0">
     <meta name="color-scheme" content="light">
     
-    <title>Aya Studio WASM </title>
+    <title>Aya Studio WASM</title>
     <link rel="icon" type="image/png" href="aya-studio.png"/>
     <meta name="title" content="Aya Studio WASM" />
     <meta name="description" content="Work in progess port of Early 2016 Roblox Studio to web." />
@@ -154,38 +154,6 @@
         const ayaStudioBuildId = '051b32b21267782322c512f8';
         window.ayaStudioBuildId = ayaStudioBuildId;
         const ayaStudioDataVersion = 'd21a64691936250e223dcee0';
-        // Vercel serves the correct COOP/COEP headers for /Tools/1/Files/* from
-        // vercel.json, so this page should already be cross-origin isolated.
-        // A stale coi-serviceworker.js from an earlier deployment can still be
-        // controlling the page and break SharedArrayBuffer transfers, so
-        // proactively unregister any such service worker at startup.
-        (async () => {
-            try {
-                if (navigator.serviceWorker && window.crossOriginIsolated) {
-                    const registrations = await navigator.serviceWorker.getRegistrations();
-                    for (const registration of registrations) {
-                        const scriptURL = registration.active?.scriptURL ||
-                            registration.installing?.scriptURL ||
-                            registration.waiting?.scriptURL || '';
-                        if (/\bcoi-serviceworker\.js$/i.test(scriptURL)) {
-                            console.warn('[Aya Studio] Unregistering stale coi-serviceworker.js:', scriptURL);
-                            await registration.unregister();
-                        }
-                    }
-                }
-            } catch (error) {
-                console.warn('[Aya Studio] Could not check for stale service workers:', error);
-            }
-            if (!window.crossOriginIsolated) {
-                // If Vercel headers were missed (e.g. cache or wrong path) the
-                // SharedArrayBuffer transfer will fail. Surface a clear message.
-                console.error('[Aya Studio] Page is NOT cross-origin isolated. ' +
-                    'SharedArrayBuffer transfers to Studio workers will fail. ' +
-                    'Ensure COOP/COEP headers are served, then hard-reload (Ctrl+Shift+R).');
-                const el = document.getElementById('qtstatus');
-                if (el) el.textContent = 'Cross-origin isolation not active. Hard-reload (Ctrl+Shift+R) to retry.';
-            }
-        })();
         // Emscripten still requests Aya.Studio.data so it can apply the Studio
         // preload layout, but the fetch override serves the identical package
         // shared by Player, Server, and Studio from one cache key.
