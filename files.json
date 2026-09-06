@@ -28,5 +28,10 @@
     "name": "How To Fish",
     "image": "Files/6/image.png",
     "link": "Files/6/Files/index.html"
+  },
+  {
+    "name": "Portal",
+    "image": "Files/7/image.png",
+    "link": "Files/7/Files/index.html"
   }
 ]

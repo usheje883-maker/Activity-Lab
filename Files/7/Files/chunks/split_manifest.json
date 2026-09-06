@@ -1,0 +1,44 @@
+{
+  "split_bytes": 50000000,
+  "files": {
+    "chunks/background1.data": {
+      "total": 127742941,
+      "parts": [
+        "chunks/background1.data.part00",
+        "chunks/background1.data.part01",
+        "chunks/background1.data.part02"
+      ]
+    },
+    "chunks/portal_audio.data": {
+      "total": 904374662,
+      "parts": [
+        "chunks/portal_audio.data.part00",
+        "chunks/portal_audio.data.part01",
+        "chunks/portal_audio.data.part02",
+        "chunks/portal_audio.data.part03",
+        "chunks/portal_audio.data.part04",
+        "chunks/portal_audio.data.part05",
+        "chunks/portal_audio.data.part06",
+        "chunks/portal_audio.data.part07",
+        "chunks/portal_audio.data.part08",
+        "chunks/portal_audio.data.part09",
+        "chunks/portal_audio.data.part10",
+        "chunks/portal_audio.data.part11",
+        "chunks/portal_audio.data.part12",
+        "chunks/portal_audio.data.part13",
+        "chunks/portal_audio.data.part14",
+        "chunks/portal_audio.data.part15",
+        "chunks/portal_audio.data.part16",
+        "chunks/portal_audio.data.part17",
+        "chunks/portal_audio.data.part18"
+      ]
+    },
+    "chunks/testchmb_a_15.data": {
+      "total": 91561353,
+      "parts": [
+        "chunks/testchmb_a_15.data.part00",
+        "chunks/testchmb_a_15.data.part01"
+      ]
+    }
+  }
+}
