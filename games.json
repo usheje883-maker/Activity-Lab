@@ -346,5 +346,11 @@
     "image": "Games/57/image.png",
     "link": "Games/57/Files/index.html",
     "genre": "FNF"
+  },
+  {
+    "name": "Animation Vs FNF",
+    "image": "Games/58/image.png",
+    "link": "Games/58/Files/index.html",
+    "genre": "FNF"
   }
 ]
