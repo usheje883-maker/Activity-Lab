@@ -44,6 +44,17 @@ if (ENVIRONMENT_IS_NODE) {
   ENVIRONMENT_IS_PTHREAD = ENVIRONMENT_IS_WORKER && worker_threads['workerData'] == 'em-pthread'
 }
 
+// Pthread workers do not have alert()/confirm()/prompt() in their global scope.
+// Some engine glue (asm-const 643123) calls alert() from a worker, which threw a
+// ReferenceError and crashed the game. Route these to console instead.
+if (ENVIRONMENT_IS_WORKER && typeof alert == 'undefined') {
+  self.alert = function(message) {
+    console.error('[worker:alert] ' + message);
+  };
+  self.confirm = function() { return true; };
+  self.prompt = function() { return null; };
+}
+
 // --pre-jses are emitted after the Module integration code, so that they can
 // refer to Module (if they choose; they can also define Module)
 // include: emscripten/pre.js
