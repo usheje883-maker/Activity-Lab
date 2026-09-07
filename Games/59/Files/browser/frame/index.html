@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: transparent;
+    }
+
+    #proxy-frame {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: transparent;
+    }
+  </style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PXHK7Q7G3Z"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag("js", new Date());
+  gtag("config", "G-PXHK7Q7G3Z");
+</script>
+</head>
+<body>
+  <iframe id="proxy-frame" allow="autoplay; fullscreen; gamepad; cross-origin-isolated"></iframe>
+  <script src="/browserjs/scramjet/scramjet.js"></script>
+  <script src="/browserjs/controller/controller.api.js"></script>
+  <script src="/js/transport.js"></script>
+  <script>
+    const READY_MESSAGE = "scramjet-bridge-ready";
+    const ERROR_MESSAGE = "scramjet-bridge-error";
+    const URL_MESSAGE = "scramjet-host-url";
+    const FRAME_LOADED_MESSAGE = "scramjet-host-frame-loaded";
+    const META_MESSAGE = "scramjet-host-meta";
+    const LOAD_MESSAGE = "scramjet-load";
+    const BACK_MESSAGE = "scramjet-back";
+    const FORWARD_MESSAGE = "scramjet-forward";
+    const RELOAD_MESSAGE = "scramjet-reload";
+    const NEW_TAB_MESSAGE = "scramjet-new-tab";
+    const EXTENSIONS_MESSAGE = "scramjet-extensions";
+    const proxyFrame = document.getElementById("proxy-frame");
+    const bridgeParams = new URLSearchParams(location.search);
+    const bridgeMode = bridgeParams.get("mode") || "host";
+    const bridgeTransport = bridgeParams.get("transport") || undefined;
+    const previewUrl = bridgeParams.get("url") || "";
+
+    let controller;
+    let scramjetFrame;
+    let lastProxyUrl = "";
+    
+	Alert("Ripped From truffled.lol by Activity Lab")
+	
+    function normalizeTargetUrl(value) {
+      try {
+        const parsedUrl = new URL(String(value || "").trim());
+        return ["http:", "https:"].includes(parsedUrl.protocol) ? parsedUrl.href : "";
+      } catch {
+        return "";
+      }
+    }
+
+    function postToParent(type, extra = {}) {
+      if (bridgeMode === "preview" || window.parent === window) return;
+      window.parent.postMessage({ type, ...extra }, location.origin);
+    }
+
+    function loadRuntimeScript(src) {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = src;
+        script.onload = resolve;
+        script.onerror = () => reject(new Error(`Unable to load ${src}`));
+        document.head.appendChild(script);
+      });
+    }
+
+    async function ensureRuntimeFiles() {
+      if (!globalThis.$scramjet) {
+        await loadRuntimeScript("/browserjs/scramjet/scramjet.js");
+      }
+      if (!globalThis.$scramjetController?.Controller) {
+        await loadRuntimeScript("/browserjs/controller/controller.api.js");
+      }
+      if (!globalThis.TruffledTransport) await loadRuntimeScript("/js/transport.js");
+    }
+
+    async function getScramjetWorker() {
+      const registration = await navigator.serviceWorker.register("/browserjs-sw.js", {
+        scope: "/",
+        type: "classic",
+        updateViaCache: "none",
+      });
+      await navigator.serviceWorker.ready;
+      const worker = registration.active || registration.waiting || registration.installing;
+      if (!worker) throw new Error("Scramjet service worker did not start.");
+      if (worker.state !== "activated") {
+        await new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => reject(new Error("Scramjet service worker activation timed out.")), 15000);
+          worker.addEventListener("statechange", () => {
+            if (worker.state === "activated") {
+              clearTimeout(timeout);
+              resolve();
+            } else if (worker.state === "redundant") {
+              clearTimeout(timeout);
+              reject(new Error("Scramjet service worker became redundant."));
+            }
+          });
+        });
+      }
+      const activeWorker = registration.active || worker;
+      if (navigator.serviceWorker.controller !== activeWorker) {
+        await new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => reject(new Error("Scramjet service worker did not take control.")), 10000);
+          const onControllerChange = () => {
+            if (navigator.serviceWorker.controller !== activeWorker) return;
+            clearTimeout(timeout);
+            navigator.serviceWorker.removeEventListener("controllerchange", onControllerChange);
+            resolve();
+          };
+          navigator.serviceWorker.addEventListener("controllerchange", onControllerChange);
+          onControllerChange();
+        });
+      }
+      return activeWorker;
+    }
+
+    function createUrlWatcherPlugin(onUrlChange) {
+      const ManagedPlugin = globalThis.$scramjetController.ManagedPlugin;
+      return new class extends ManagedPlugin {
+        constructor() {
+          super("url-watcher", []);
+        }
+
+        install(frame) {
+          super.install(frame);
+          this.tap(frame.hooks.init.post, (event) => {
+            if (!event.isTopLevel) return;
+            const historyPrototype = event.window.History?.prototype;
+            if (historyPrototype && !historyPrototype.__truffledOptionalUrlFix) {
+              for (const methodName of ["pushState", "replaceState"]) {
+                const originalMethod = historyPrototype[methodName];
+                if (typeof originalMethod !== "function") continue;
+                historyPrototype[methodName] = function (state, unused, url) {
+                  if (url === undefined) {
+                    return originalMethod.call(this, state, unused, event.client.url.href);
+                  }
+                  return originalMethod.call(this, state, unused, url);
+                };
+              }
+              Object.defineProperty(historyPrototype, "__truffledOptionalUrlFix", {
+                configurable: true,
+                value: true,
+              });
+            }
+            const update = () => onUrlChange(event.client.url.href);
+            update();
+            this.tap(event.client.hooks.lifecycle.navigate, (_event, navigation) => {
+              onUrlChange(navigation.url);
+            });
+            event.window.addEventListener("hashchange", update, { capture: true });
+          });
+        }
+      }();
+    }
+
+    function createResponseHeadersPlugin() {
+      const ManagedPlugin = globalThis.$scramjetController.ManagedPlugin;
+      return new class extends ManagedPlugin {
+        constructor() {
+          super("response-headers", []);
+        }
+
+        install(frame) {
+          super.install(frame);
+          this.tap(frame.hooks.fetch.preresponse, (_event, state) => {
+            const headers = state.response.rawHeaders;
+            const blocked = new Set([
+              "content-encoding",
+              "content-length",
+              "transfer-encoding",
+              "content-security-policy",
+              "content-security-policy-report-only",
+              "x-frame-options",
+            ]);
+            for (let index = headers.length - 1; index >= 0; index -= 1) {
+              if (blocked.has(headers[index][0].toLowerCase())) headers.splice(index, 1);
+            }
+          });
+        }
+      }();
+    }
+
+    function updateProxyUrl(url) {
+      if (!url || url === lastProxyUrl) return;
+      lastProxyUrl = url;
+      postToParent(URL_MESSAGE, { url });
+    }
+
+    function sendFrameMeta() {
+      try {
+        const frameDocument = proxyFrame.contentDocument;
+        if (!frameDocument) return;
+        const icon = frameDocument.querySelector("link[rel~='icon']")?.href || "";
+        postToParent(META_MESSAGE, {
+          title: frameDocument.title || lastProxyUrl,
+          icon,
+        });
+      } catch {
+      }
+    }
+
+    function bindFrameShortcuts() {
+      try {
+        proxyFrame.contentWindow.addEventListener("keydown", (event) => {
+          if (event.ctrlKey && event.key.toLowerCase() === "t") {
+            event.preventDefault();
+            postToParent(NEW_TAB_MESSAGE);
+          }
+        });
+      } catch {
+      }
+    }
+
+    function setupHostBridge() {
+      window.addEventListener("message", (event) => {
+        if (event.origin !== location.origin || event.source !== window.parent) return;
+        switch (event.data?.type) {
+          case LOAD_MESSAGE:
+            if (event.data.url) {
+              const targetUrl = normalizeTargetUrl(event.data.url);
+              if (!targetUrl) break;
+              lastProxyUrl = targetUrl;
+              scramjetFrame.go(targetUrl);
+            }
+            break;
+          case BACK_MESSAGE:
+            scramjetFrame.back();
+            break;
+          case FORWARD_MESSAGE:
+            scramjetFrame.forward();
+            break;
+          case RELOAD_MESSAGE:
+            scramjetFrame.reload();
+            break;
+          case EXTENSIONS_MESSAGE:
+            try {
+              window.TruffledExtensions?.injectPayloadIntoDocument?.(
+                proxyFrame.contentDocument,
+                event.data.extensions || []
+              );
+            } catch (error) {
+              console.warn("extension injection skipped", error);
+            }
+            break;
+          default:
+            break;
+        }
+      });
+
+      proxyFrame.addEventListener("load", () => {
+        bindFrameShortcuts();
+        sendFrameMeta();
+        postToParent(FRAME_LOADED_MESSAGE);
+      });
+    }
+
+    async function initializeBridge() {
+      await ensureRuntimeFiles();
+      if (!globalThis.$scramjet || !globalThis.$scramjetController?.Controller) {
+        throw new Error("Scramjet runtime files failed to load.");
+      }
+      if (!globalThis.TruffledTransport) {
+        throw new Error("Scramjet transport failed to load.");
+      }
+      const worker = await getScramjetWorker();
+      const transport = await globalThis.TruffledTransport.createClient(bridgeTransport);
+      controller = new globalThis.$scramjetController.Controller({
+        serviceworker: worker,
+        transport,
+        config: {
+          prefix: "/browser/service/",
+          scramjetPath: "/browserjs/scramjet/scramjet.js",
+          injectPath: "/browserjs/controller/controller.inject.js",
+          wasmPath: "/browserjs/scramjet/scramjet.wasm",
+          virtualWasmPath: "scramjet.wasm.js",
+        },
+      });
+      await controller.wait();
+      const urlWatcher = createUrlWatcherPlugin(updateProxyUrl);
+      const responseHeaders = createResponseHeadersPlugin();
+      scramjetFrame = controller.createFrame(proxyFrame, { plugins: [urlWatcher, responseHeaders] });
+
+      if (bridgeMode === "preview") {
+        const targetUrl = normalizeTargetUrl(previewUrl);
+        if (targetUrl) scramjetFrame.go(targetUrl);
+      } else {
+        setupHostBridge();
+        postToParent(READY_MESSAGE);
+      }
+    }
+
+    initializeBridge().catch((error) => {
+      console.error("scramjet bridge init error", error);
+      postToParent(ERROR_MESSAGE, {
+        message: error instanceof Error ? error.message : String(error),
+      });
+    });
+  </script>
+</body>
+</html>
