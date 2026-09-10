@@ -364,5 +364,17 @@
     "image": "Games/60/image.png",
     "link": "Games/60/Files/index.html",
     "genre": "Survival"
+  },
+  {
+    "name": "Survival Race V2",
+    "image": "Games/61/image.png",
+    "link": "Games/61/Files/index.html",
+    "genre": "Survival"
+  },
+  {
+    "name": "School Boy Runaway",
+    "image": "Games/62/image.png",
+    "link": "Games/62/Files/index.html",
+    "genre": "Survival"
   }
 ]
