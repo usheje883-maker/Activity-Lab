@@ -358,5 +358,11 @@
     "image": "Games/59/image.png",
     "link": "Games/59/Files/browser/frame/index.html",
     "genre": "Simulator"
+  },
+  {
+    "name": "P.V.Z. 2 Gardenless",
+    "image": "Games/60/image.png",
+    "link": "Games/60/Files/index.html",
+    "genre": "Survival"
   }
 ]
