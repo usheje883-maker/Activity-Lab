@@ -43,5 +43,10 @@
     "name": "Lethal Company",
     "image": "Files/9/image.png",
     "link": "Files/9/Files/index.html"
+  },
+  {
+    "name": "People Playground",
+    "image": "Files/10/image.png",
+    "link": "Files/10/Files/index.html"
   }
 ]
