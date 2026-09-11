@@ -48,5 +48,15 @@
     "name": "People Playground",
     "image": "Files/10/image.png",
     "link": "Files/10/Files/index.html"
+  },
+  {
+    "name": "T.A.B.S",
+    "image": "Files/11/image.png",
+    "link": "Files/11/Files/index.html"
+  },
+  {
+    "name": "Terraria",
+    "image": "Files/12/image.png",
+    "link": "Files/12/Files/index.html"
   }
 ]
