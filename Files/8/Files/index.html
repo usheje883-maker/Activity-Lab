@@ -445,7 +445,10 @@
   // and the right Content-Range total and passes. A pass therefore says nothing
   // about the read that follows it, and the run pays for that discovery in the
   // middle of a room. Where the host is known to do this, do not ask.
-  var NO_RANGES = /(^|\.)jsdelivr\.net$/i;
+  // Vercel: it compresses the pinned chunk URLs and a Range request on a cached,
+  // revalidated copy comes back 304 and the browser fails to decode it
+  // (net::ERR_CONTENT_DECODING_FAILED). Round 90h. Whole GETs on Vercel are sane.
+  var NO_RANGES = /(^|\.)(jsdelivr\.net|vercel\.app)$/i;
   function hostOf(u) {
     try { return new URL(u, typeof location !== 'undefined' ? location.href : undefined).hostname; }
     catch (e) { return ''; }
