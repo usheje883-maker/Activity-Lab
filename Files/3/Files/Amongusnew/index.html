@@ -1,127 +1,335 @@
 <!DOCTYPE html>
 <html lang="en-us">
-	<head>
-		<meta charset="utf-8">
-			<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-				<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes">
-					<title>Unity WebGL Player | Among Us</title>
-					<link rel="shortcut icon" href="TemplateData/favicon.ico">
-						<link rel="stylesheet" href="TemplateData/style.css">
-							<style>
-								html, body {
-								width: 100%;
-								height: 100%;
-								margin: 0;
-								padding: 0;
-								overflow: hidden;
-								}
-								#unity-container {
-								width: 100%;
-								height: 100%;
-								position: absolute;
-								top: 0;
-								left: 0;
-								}
-								#unity-canvas {
-								width: 100% !important;
-								height: 100% !important;
-								}
-							</style>
-						</head>
-	<body>
-		<div id="unity-container" class="unity-desktop">
-			<canvas id="unity-canvas" tabindex="-1"></canvas>
-			<div id="unity-loading-bar">
-				<div id="unity-logo"></div>
-				<div id="unity-progress-bar-empty">
-					<div id="unity-progress-bar-full"></div>
-				</div>
-			</div>
-			<div id="unity-warning"> </div>
-			<div id="unity-footer">
-				<div id="unity-webgl-logo"></div>
-				<div id="unity-fullscreen-button"></div>
-				<div id="unity-build-title">Among Us</div>
-			</div>
-		</div>
-		<script>
-			var container = document.querySelector("#unity-container");
-			var canvas = document.querySelector("#unity-canvas");
-			var loadingBar = document.querySelector("#unity-loading-bar");
-			var progressBarFull = document.querySelector("#unity-progress-bar-full");
-			var fullscreenButton = document.querySelector("#unity-fullscreen-button");
-			var warningBanner = document.querySelector("#unity-warning");
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | Among Us</title>
+    <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/larpinguser/dotripports@main/AmongUs-WebGL/TemplateData/favicon.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/larpinguser/dotripports@main/AmongUs-WebGL/TemplateData/style.css">
+    <style>
+      #loaderOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #181818;
+        z-index: 100000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #e6e6e6;
+        font-family: system-ui, -apple-system, sans-serif;
+        transition: opacity 0.4s ease;
+      }
+      .loader-card {
+        background: #232323;
+        border: 1px solid #333;
+        padding: 30px 40px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        text-align: center;
+        width: 320px;
+      }
+      .loader-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #fff;
+      }
+      #loaderStatusText {
+        font-size: 13px;
+        color: #888;
+        margin-bottom: 20px;
+        min-height: 18px;
+      }
+      .progress-track {
+        width: 100%;
+        height: 8px;
+        background: #151515;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 15px;
+      }
+      #progressBarFill {
+        width: 0%;
+        height: 100%;
+        background: #4f46e5;
+        border-radius: 4px;
+        transition: width 0.1s linear;
+      }
+      .loader-stats {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: #aaa;
+        font-variant-numeric: tabular-nums;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loaderOverlay">
+      <div class="loader-card">
+        <div class="loader-title">Loading Among Us</div>
+        <div id="loaderStatusText">Connecting to CDN...</div>
+        <div class="progress-track">
+          <div id="progressBarFill"></div>
+        </div>
+        <div class="loader-stats">
+          <span id="loaderMbText">0.00 MB / calculating...</span>
+          <span id="loaderPercentText">0%</span>
+        </div>
+      </div>
+    </div>
 
-			function unityShowBanner(msg, type) {
-			function updateBannerVisibility() {
-			warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-			}
-			var div = document.createElement('div');
-			div.innerHTML = msg;
-			warningBanner.appendChild(div);
-			if (type == 'error') div.style = 'background: red; padding: 10px;';
-			else {
-			if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-			setTimeout(function() {
-			warningBanner.removeChild(div);
-			updateBannerVisibility();
-			}, 5000);
-			}
-			updateBannerVisibility();
-			}
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas" width=960 height=540 tabindex="-1"></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+      </div>
+      <div id="unity-warning"> </div>
+      <div id="unity-footer">
+        <div id="unity-webgl-logo"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">Among Us</div>
+      </div>
+    </div>
 
-			var buildUrl = "Build";
-			var loaderUrl = buildUrl + "/Build.loader.js";
-			var config = {
-			dataUrl: buildUrl + "/Build.data",
-			frameworkUrl: buildUrl + "/Build.framework.js",
-			codeUrl: buildUrl + "/Build.wasm",
-			streamingAssetsUrl: "StreamingAssets",
-			companyName: "Innersloth",
-			productName: "Among Us",
-			productVersion: "2026.6.5",
-			showBanner: unityShowBanner,
-			};
+    <script>
+      const CDN_ROOT = "https://cdn.jsdelivr.net/gh/larpinguser/dotripports@main/AmongUs-WebGL/";
 
-			loadingBar.style.display = "block";
+      const statusEl = document.getElementById("loaderStatusText");
+      const fillEl = document.getElementById("progressBarFill");
+      const mbEl = document.getElementById("loaderMbText");
+      const percentEl = document.getElementById("loaderPercentText");
+      const overlayEl = document.getElementById("loaderOverlay");
 
-			window.splitRoot = "";
+      let totalBytesGlobal = 0;
+      let loadedBytesMap = {};
 
-			function startGame() {
-			var script = document.createElement("script");
-			script.src = loaderUrl;
-			script.onload = () => {
-			createUnityInstance(canvas, config, (progress) => {
-			progressBarFull.style.width = 100 * progress + "%";
-			}).then((unityInstance) => {
-			loadingBar.style.display = "none";
-			fullscreenButton.onclick = () => {
-			unityInstance.SetFullscreen(1);
-			};
-			}).catch((message) => {
-			alert(message);
-			});
-			};
-			document.body.appendChild(script);
-			}
+      function refreshDisplay(statusMessage) {
+        let currentLoaded = 0;
+        for (let k in loadedBytesMap) {
+          currentLoaded += loadedBytesMap[k];
+        }
 
-			var splitScript = document.createElement("script");
-			splitScript.src = "split-loader.js";
-			splitScript.onload = () => {
-			if (!window.splitLoader) {
-			alert("split-loader.js failed to load.");
-			return;
-			}
-			window.splitLoader.preload((loaded, total) => {
-			progressBarFull.style.width = 100 * loaded / total + "%";
-			}).then(startGame).catch((err) => {
-			alert("Failed to load game data parts: " + ((err && err.message) ? err.message : err));
-			});
-			};
-			splitScript.onerror = () => {
-			alert("Could not load split-loader.js");
-			};
-			document.body.appendChild(splitScript);
-		</script>
-	</body>
+        let loadedMb = (currentLoaded / (1024 * 1024)).toFixed(2);
+        let totalMb = totalBytesGlobal > 0 ? (totalBytesGlobal / (1024 * 1024)).toFixed(2) : 0;
+
+        let pct = 0;
+        if (totalBytesGlobal > 0) {
+          pct = Math.min(100, Math.round((currentLoaded / totalBytesGlobal) * 100));
+          mbEl.textContent = `${loadedMb} MB / ${totalMb} MB`;
+        } else {
+          mbEl.textContent = `${loadedMb} MB`;
+        }
+
+        fillEl.style.width = pct + "%";
+        percentEl.textContent = pct + "%";
+        if (statusMessage) statusEl.textContent = statusMessage;
+      }
+
+      const rawFetch = window.fetch.bind(window);
+      rawFetch(CDN_ROOT + "split_manifest.json", { mode: 'cors' })
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          if (!data) return;
+          let sum = 0;
+          let files = Array.isArray(data.files) ? data.files : (data.manifest || []);
+          if (files.length) {
+            files.forEach(f => { sum += (f.size || f.totalSize || f.length || 0); });
+          } else {
+            for (let k in data) {
+              if (typeof data[k] === 'object' && data[k].size) sum += data[k].size;
+            }
+          }
+          if (sum > 0) {
+            totalBytesGlobal = sum;
+            refreshDisplay();
+          }
+        })
+        .catch(() => {});
+
+      window.fetch = function(input, init) {
+        let url = typeof input === 'string' ? input : (input && input.url ? input.url : '');
+        if (url && !url.startsWith('http') && !url.startsWith('blob:') && !url.startsWith('data:')) {
+          url = CDN_ROOT + url.replace(/^\/+/, '');
+        }
+
+        init = init || {};
+        if (url.includes('cdn.jsdelivr.net')) {
+          init.credentials = 'omit';
+          if (init.headers) {
+            if (init.headers instanceof Headers) {
+              init.headers.delete('authorization');
+            } else if (typeof init.headers === 'object') {
+              delete init.headers['authorization'];
+              delete init.headers['Authorization'];
+            }
+          }
+        }
+
+        return rawFetch(url, init).then(res => {
+          if (!res.ok) return res;
+
+          let isChunk = url.includes('.part') || url.includes('.data') || url.includes('.wasm') || url.includes('.bundle');
+          if (!isChunk || !res.body) return res;
+
+          let cl = res.headers.get('content-length');
+          if (cl && totalBytesGlobal === 0) {
+            totalBytesGlobal += parseInt(cl, 10);
+          }
+
+          const reader = res.body.getReader();
+          let streamLoaded = 0;
+
+          const stream = new ReadableStream({
+            start(controller) {
+              function pump() {
+                reader.read().then(({ done, value }) => {
+                  if (done) {
+                    controller.close();
+                    return;
+                  }
+                  streamLoaded += value.byteLength;
+                  loadedBytesMap[url] = streamLoaded;
+                  refreshDisplay("Downloading game data...");
+                  controller.enqueue(value);
+                  pump();
+                }).catch(err => controller.error(err));
+              }
+              pump();
+            }
+          });
+
+          return new Response(stream, {
+            headers: res.headers,
+            status: res.status,
+            statusText: res.statusText
+          });
+        });
+      };
+
+      const origOpen = XMLHttpRequest.prototype.open;
+      const origSetHeader = XMLHttpRequest.prototype.setRequestHeader;
+      XMLHttpRequest.prototype.open = function(m, u) {
+        if (typeof u === 'string' && !u.startsWith('http') && !u.startsWith('blob:') && !u.startsWith('data:')) {
+          u = CDN_ROOT + u.replace(/^\/+/, '');
+        }
+        this._u = u;
+        return origOpen.call(this, m, u);
+      };
+      XMLHttpRequest.prototype.setRequestHeader = function(name, val) {
+        if (this._u && this._u.includes('cdn.jsdelivr.net')) {
+          if (name.toLowerCase() === 'authorization' || name.toLowerCase().startsWith('x-')) {
+            return;
+          }
+        }
+        return origSetHeader.apply(this, arguments);
+      };
+
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var warningBanner = document.querySelector("#unity-warning");
+
+      function unityShowBanner(msg, type) {
+        function updateBannerVisibility() {
+          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        }
+        var div = document.createElement('div');
+        div.innerHTML = msg;
+        warningBanner.appendChild(div);
+        if (type == 'error') div.style = 'background: red; padding: 10px;';
+        else {
+          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
+          setTimeout(function() {
+            warningBanner.removeChild(div);
+            updateBannerVisibility();
+          }, 5000);
+        }
+        updateBannerVisibility();
+      }
+
+      var buildUrl = CDN_ROOT + "Build";
+      var loaderUrl = buildUrl + "/Build.loader.js";
+      var config = {
+        dataUrl: buildUrl + "/Build.data",
+        frameworkUrl: buildUrl + "/Build.framework.js",
+        codeUrl: buildUrl + "/Build.wasm",
+        streamingAssetsUrl: CDN_ROOT + "StreamingAssets",
+        companyName: "Innersloth",
+        productName: "Among Us",
+        productVersion: "2026.6.5",
+        showBanner: unityShowBanner,
+        autoSyncPersistentDataPath: true
+      };
+
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+        container.className = "unity-mobile";
+        canvas.className = "unity-mobile";
+      } else {
+        canvas.style.width = "960px";
+        canvas.style.height = "540px";
+      }
+
+      loadingBar.style.display = "block";
+      window.splitRoot = CDN_ROOT;
+
+      function startGame() {
+        statusEl.textContent = "Compiling engine & assets...";
+        var script = document.createElement("script");
+        script.crossOrigin = "anonymous";
+        script.src = loaderUrl;
+        script.onload = () => {
+          createUnityInstance(canvas, config, (progress) => {
+            progressBarFull.style.width = 100 * progress + "%";
+            fillEl.style.width = 100 * progress + "%";
+            percentEl.textContent = Math.round(100 * progress) + "%";
+            statusEl.textContent = "Starting Unity instance...";
+          }).then((unityInstance) => {
+            loadingBar.style.display = "none";
+            overlayEl.style.opacity = '0';
+            setTimeout(() => overlayEl.remove(), 400);
+            fullscreenButton.onclick = () => {
+              unityInstance.SetFullscreen(1);
+            };
+          }).catch((message) => {
+            alert(message);
+          });
+        };
+        document.body.appendChild(script);
+      }
+
+      var splitScript = document.createElement("script");
+      splitScript.crossOrigin = "anonymous";
+      splitScript.src = CDN_ROOT + "split-loader.js";
+      splitScript.onload = () => {
+        if (!window.splitLoader) {
+          alert("split-loader.js failed to load.");
+          return;
+        }
+        window.splitLoader.preload((loadedPartIndex, totalPartCount) => {
+          progressBarFull.style.width = (100 * loadedPartIndex / totalPartCount) + "%";
+          refreshDisplay(`Loading game parts (${loadedPartIndex}/${totalPartCount})...`);
+        }).then(startGame).catch((err) => {
+          alert("Failed to load game data parts: " + ((err && err.message) ? err.message : err));
+        });
+      };
+      splitScript.onerror = () => {
+        alert("Could not load split-loader.js from CDN");
+      };
+      document.body.appendChild(splitScript);
+    </script>
+  </body>
 </html>
