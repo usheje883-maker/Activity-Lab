@@ -1,31 +1,33 @@
 {
   "headers": [
     {
-      "source": "/Files/(.*)/Files/(.*)",
+      "source": "/Games/(.*)\\.(png|jpg|jpeg|gif|webp|ico|svg|css|js)$",
       "headers": [
-        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
-        { "key": "Cross-Origin-Embedder-Policy", "value": "require-corp" }
+        { "key": "Cache-Control", "value": "public, max-age=3600, stale-while-revalidate=86400" }
       ]
     },
     {
-      "source": "/Games/(.*)/Files/(.*)",
+      "source": "/Files/(.*)\\.(png|jpg|jpeg|gif|webp|ico|svg|css|js)$",
       "headers": [
-        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
-        { "key": "Cross-Origin-Embedder-Policy", "value": "require-corp" }
+        { "key": "Cache-Control", "value": "public, max-age=3600, stale-while-revalidate=86400" }
       ]
     },
     {
-      "source": "/Tools/1/Files/(.*)",
+      "source": "/Tools/(.*)\\.(png|jpg|jpeg|gif|webp|ico|svg|css|js)$",
       "headers": [
-        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
-        { "key": "Cross-Origin-Embedder-Policy", "value": "require-corp" }
+        { "key": "Cache-Control", "value": "public, max-age=3600, stale-while-revalidate=86400" }
       ]
     },
     {
-      "source": "/(iframe|specialiframe)\\.html",
+      "source": "/Storage/(.*)",
       "headers": [
-        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" },
-        { "key": "Cross-Origin-Embedder-Policy", "value": "require-corp" }
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/.*\\.(html|htm)$",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache, must-revalidate" }
       ]
     }
   ]
