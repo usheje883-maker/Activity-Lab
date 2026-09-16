@@ -105,7 +105,161 @@
   <script src="src/import-map.json" type="systemjs-importmap" charset="utf-8"> </script>
 
   <script>
-    System.import('./index.js').catch(function (err) { console.error(err); })
+    (function () {
+      var PVR_CHUNKS = {
+        total: 33554523,
+        target: /assets\/resources\/native\/1a\/1aae2f737\.pvr($|\?)/,
+        parts: [
+          "assets/resources/native/1a/1aae2f737.pvr.part000",
+          "assets/resources/native/1a/1aae2f737.pvr.part001"
+        ]
+      };
+      var NativeXHR = window.XMLHttpRequest;
+
+      function loadChunks(url) {
+        return Promise.all(PVR_CHUNKS.parts.map(function (part) {
+          return fetch(part, { cache: "force-cache" }).then(function (r) {
+            return r.arrayBuffer();
+          });
+        })).then(function (bufs) {
+          var out = new Uint8Array(PVR_CHUNKS.total);
+          var off = 0;
+          for (var i = 0; i < bufs.length; i++) {
+            out.set(new Uint8Array(bufs[i]), off);
+            off += bufs[i].byteLength;
+          }
+          return out.buffer;
+        });
+      }
+
+      function SegXHR() {
+        this._listeners = {};
+        this._real = null;
+        this._segValue = null;
+        this._url = '';
+        this._method = 'GET';
+        this._async = true;
+        this._responseType = '';
+        this._readyState = 0;
+        this._status = 0;
+        this._statusText = '';
+      }
+      Object.defineProperty(SegXHR.prototype, 'readyState', { get: function () { return this._real && !this._segValue ? this._real.readyState : this._readyState; }, configurable: true });
+      Object.defineProperty(SegXHR.prototype, 'status', { get: function () { return this._real && !this._segValue ? this._real.status : this._status; }, configurable: true });
+      Object.defineProperty(SegXHR.prototype, 'statusText', { get: function () { return this._real && !this._segValue ? this._real.statusText : this._statusText; }, configurable: true });
+      Object.defineProperty(SegXHR.prototype, 'responseType', {
+        get: function () { return this._responseType; },
+        set: function (v) { this._responseType = v; if (this._real) this._real.responseType = v; },
+        configurable: true
+      });
+      Object.defineProperty(SegXHR.prototype, 'response', {
+        get: function () {
+          if (this._segValue !== null) return this._segValue;
+          if (this._real) return this._real.response;
+          return null;
+        },
+        configurable: true
+      });
+      Object.defineProperty(SegXHR.prototype, 'responseText', {
+        get: function () {
+          if (this._real) return this._real.responseText;
+          return '';
+        },
+        configurable: true
+      });
+      Object.defineProperty(SegXHR.prototype, 'timeout', {
+        get: function () { return this._real ? this._real.timeout : this._timeout; },
+        set: function (v) { this._timeout = v; if (this._real) this._real.timeout = v; },
+        configurable: true
+      });
+      Object.defineProperty(SegXHR.prototype, 'upload', {
+        get: function () { return this._real ? this._real.upload : this._upload; },
+        configurable: true
+      });
+      SegXHR.prototype.addEventListener = function (t, f) { (this._listeners[t] = this._listeners[t] || []).push(f); };
+      SegXHR.prototype.removeEventListener = function (t, f) {
+        var a = this._listeners[t];
+        if (!a) return;
+        var i = a.indexOf(f);
+        if (i !== -1) a.splice(i, 1);
+      };
+      SegXHR.prototype.dispatchEvent = function (ev) {
+        var a = this._listeners[ev.type];
+        if (a) for (var i = 0; i < a.length; i++) a[i].call(this, ev);
+        return true;
+      };
+      SegXHR.prototype._fire = function (name, props) {
+        var ev = props || {};
+        ev.type = name;
+        var h = this['on' + name];
+        if (typeof h === 'function') h.call(this, ev);
+        var a = this._listeners[name];
+        if (a) for (var i = 0; i < a.length; i++) a[i].call(this, ev);
+      };
+      SegXHR.prototype.open = function (method, url, async) {
+        this._method = method || 'GET';
+        this._url = String(url);
+        this._async = async !== false;
+      };
+      SegXHR.prototype.setRequestHeader = function () {};
+      SegXHR.prototype.overrideMimeType = function () {};
+      SegXHR.prototype.getResponseHeader = function (n) { return this._real && !this._segValue ? this._real.getResponseHeader(n) : null; };
+      SegXHR.prototype.getAllResponseHeaders = function () { return this._real && !this._segValue ? this._real.getAllResponseHeaders() : ''; };
+      SegXHR.prototype.abort = function () {
+        if (this._real) this._real.abort();
+        if (this._segValue === null) this._fire('abort', {});
+      };
+      SegXHR.prototype.send = function (body) {
+        var self = this;
+        var isTarget = PVR_CHUNKS.target.test(this._url);
+        if (isTarget && this._async) {
+          this._runSeg();
+        } else {
+          this._runNative(body);
+        }
+      };
+      SegXHR.prototype._runNative = function (body) {
+        var self = this;
+        var x = this._real = new NativeXHR();
+        if (this._responseType) x.responseType = this._responseType;
+        if (this._timeout) x.timeout = this._timeout;
+        x.onreadystatechange = function () { self._fire('readystatechange'); };
+        x.onprogress = function (e) { self._fire('progress', e); };
+        x.onload = function (e) { self._fire('load', e); };
+        x.onerror = function (e) { self._fire('error', e); };
+        x.onabort = function (e) { self._fire('abort', e); };
+        x.open(this._method, this._url, this._async);
+        x.send(body);
+      };
+      SegXHR.prototype._runSeg = function () {
+        var self = this;
+        loadChunks(this._url).then(function (buffer) {
+          self._segValue = buffer;
+          self._readyState = 4;
+          self._status = 200;
+          self._statusText = 'OK';
+          self._fire('readystatechange');
+          self._fire('load', {});
+        }).catch(function (err) {
+          self._fire('error', {});
+        });
+      };
+      window.XMLHttpRequest = SegXHR;
+
+      var NativeFetch = window.fetch;
+      window.fetch = function (input, init) {
+        var url = typeof input === 'string' ? input : input.url;
+        if (PVR_CHUNKS.target.test(url)) {
+          return loadChunks(url).then(function (buffer) {
+            return new Response(buffer, {
+              status: 200,
+              headers: { 'Content-Type': 'application/octet-stream' }
+            });
+          });
+        }
+        return NativeFetch(input, init);
+      };
+    })();
   </script>
   <script src="tmpPatch.js"></script>
 </body>

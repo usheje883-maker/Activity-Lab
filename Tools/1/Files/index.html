@@ -173,7 +173,37 @@
         const ayaStudioLastPageHideKey = 'aya-studio-last-pagehide';
         const ayaStudioReloadReleaseDelayMs = 1500;
         const ayaStudioRuntimeAssetNames = new Set(['Aya.Studio.wasm', 'Aya.Studio.data']);
-        const ayaStudioNativeFetch = window.fetch.bind(window);
+        const ayaStudioOriginalNativeFetch = window.fetch.bind(window);
+        const ayaStudioChunkMap = {
+            'Aya.Studio.data': ['Aya.Studio.data.part00', 'Aya.Studio.data.part01', 'Aya.Studio.data.part02', 'Aya.Studio.data.part03'],
+            'Aya.Studio.wasm': ['Aya.Studio.wasm.part00', 'Aya.Studio.wasm.part01', 'Aya.Studio.wasm.part02', 'Aya.Studio.wasm.part03']
+        };
+        async function ayaStudioFetchChunked(input) {
+            const url = new URL(typeof input === 'string' ? input : input.url, window.location.href);
+            const fileName = url.pathname.substring(url.pathname.lastIndexOf('/') + 1);
+            const parts = ayaStudioChunkMap[fileName];
+            if (!parts) return null;
+            const buffers = [];
+            for (const part of parts) {
+                const partUrl = new URL(part, url).href;
+                const res = await ayaStudioOriginalNativeFetch(partUrl);
+                if (!res.ok) throw new Error(`Failed to fetch ${part}: ${res.status}`);
+                buffers.push(new Uint8Array(await res.arrayBuffer()));
+            }
+            const total = buffers.reduce((a, b) => a + b.length, 0);
+            const merged = new Uint8Array(total);
+            let offset = 0;
+            for (const buf of buffers) { merged.set(buf, offset); offset += buf.length; }
+            return new Response(merged, {
+                status: 200,
+                headers: { 'Content-Type': fileName.endsWith('.wasm') ? 'application/wasm' : 'application/octet-stream' }
+            });
+        }
+        const ayaStudioNativeFetch = async (input, init) => {
+            const chunked = await ayaStudioFetchChunked(input);
+            if (chunked) return chunked;
+            return ayaStudioOriginalNativeFetch(input, init);
+        };
         const ayaStudioRuntimeDownloads = new Map(
             Array.from(ayaStudioRuntimeAssetNames, name => [name, {
                 name,
